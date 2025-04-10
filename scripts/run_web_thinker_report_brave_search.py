@@ -48,14 +48,20 @@ from prompts.prompts_report import (
 )
 
 from rank_bm25 import BM25Okapi
-import nltk
 from nltk.tokenize import word_tokenize
 # nltk.download('punkt')
 import langid
 from transformers import AutoTokenizer
 
-tokenizer = AutoTokenizer.from_pretrained("YOUR_QWQ_PATH")
-aux_tokenizer = AutoTokenizer.from_pretrained("YOUR_QWEN2.5_PATH")
+
+from dotenv import load_dotenv
+
+from pathlib import Path
+load_dotenv(dotenv_path=Path(__file__).parent.parent / ".env", override=True)
+
+tokenizer = AutoTokenizer.from_pretrained("/dss/dssfs05/pn39qo/pn39qo-dss-0001/.cache/huggingface/hub/models--Qwen--QwQ-32B/snapshots/976055f8c83f394f35dbd3ab09a285a984907bd0")
+aux_tokenizer = AutoTokenizer.from_pretrained("/dss/dssfs05/pn39qo/pn39qo-dss-0001/.cache/huggingface/hub/models--Qwen--QwQ-32B/snapshots/976055f8c83f394f35dbd3ab09a285a984907bd0")
+# aux_tokenizer = AutoTokenizer.from_pretrained("/dss/dssfs05/pn39qo/pn39qo-dss-0001/.cache/huggingface/hub/models--Qwen--Qwen2.5-72B-Instruct/snapshots/495f39366efef23836d0cfae4fbe635880d2be31")
 
 
 # Define special tokens
@@ -104,15 +110,15 @@ def parse_args():
     parser.add_argument('--min_p', type=float, default=0.05, help="Minimum p sampling parameter.")
     parser.add_argument('--top_k_sampling', type=int, default=20, help="Top-k sampling parameter.")
     parser.add_argument('--repetition_penalty', type=float, default=1.05, help="Repetition penalty. If not set, defaults based on the model.")
-    parser.add_argument('--max_tokens', type=int, default=32768, help="Maximum number of tokens to generate. If not set, defaults based on the model and dataset.")
+    parser.add_argument('--max_tokens', type=int, default=20000, help="Maximum number of tokens to generate. If not set, defaults based on the model and dataset.")
 
     # parser.add_argument('--max_search_limit', type=int, default=10, help="Maximum number of searches per question.")
-    parser.add_argument('--top_k', type=int, default=10, help="Maximum number of search documents to return.")
+    parser.add_argument('--top_k', type=int, default=5, help="Maximum number of search documents to return.")
     parser.add_argument('--keep_links', action='store_true', default=False, help="Whether to keep links in fetched web content")
     parser.add_argument('--use_jina', action='store_true', help="Whether to use Jina API for document fetching.")
     parser.add_argument('--jina_api_key', type=str, default='None', help="Your Jina API Key to Fetch URL Content.")
-    parser.add_argument('--bing_subscription_key', type=str, required=True, help="Bing Search API subscription key.")
-    parser.add_argument('--bing_endpoint', type=str, default="https://api.bing.microsoft.com/v7.0/search", help="Bing Search API endpoint.")
+    # parser.add_argument('--bing_subscription_key', type=str, required=True, help="Bing Search API subscription key.")
+    # parser.add_argument('--bing_endpoint', type=str, default="https://api.bing.microsoft.com/v7.0/search", help="Bing Search API endpoint.")
     parser.add_argument('--eval', action='store_true', help="Whether to run evaluation after generation.")
     parser.add_argument('--seed', type=int, default=None, help="Random seed for generation. If not set, will use current timestamp as seed.")
     parser.add_argument('--api_base_url', type=str, required=True, help="Base URL for the API endpoint")
@@ -181,7 +187,7 @@ async def generate_response(
     generate_mode: str = "chat",
     temperature: float = 0.0,
     top_p: float = 1.0,
-    max_tokens: int = 32768,
+    max_tokens: int = 20000,
     repetition_penalty: float = 1.0,
     top_k: int = 1,
     min_p: float = 0.0,
@@ -305,7 +311,7 @@ async def generate_deep_web_explorer(
                     results = search_cache[new_query]
                 else:
                     try:
-                        results = await brave_search_async(new_query, args.brave_api_key, args.top_k,country='us', language='en', timeout=20)
+                        results, relevant_info = await brave_search_async(new_query, args.brave_api_key, args.top_k,country='us', language='en', timeout=20)
                         search_cache[new_query] = results
                     except Exception as e:
                         print(f"Error during search query '{new_query}': {e}")
@@ -471,7 +477,7 @@ async def process_single_sequence(
         stop=[END_SEARCH_QUERY, END_WRITE_SECTION, END_EDIT_ARTICLE, BEGIN_CHECK_ARTICLE],
         generate_mode="chat"  # First generation in chat mode
     )
-    
+
     # Update token count and sequence fields
     tokens_this_response = len(response.split())
     total_tokens += tokens_this_response
@@ -636,14 +642,12 @@ async def process_single_sequence(
                 results = search_cache[search_query]
             else:
                 try:
-                    results = await brave_search_async(search_query, args.brave_api_key, country='us', language='en', timeout=20)
+                    results, relevant_info = await brave_search_async(search_query, api_key=os.getenv('BRAVE_API_KEY'), top_k=args.top_k, country='us', language='en', timeout=20)
                     search_cache[search_query] = results
                 except Exception as e:
                     print(f"Error during search query '{search_query}': {e}")
                     results = {}
             print(f'---Searched for:---\n{search_query}\n')
-
-            relevant_info = extract_relevant_info(results)[:args.top_k]
 
             # Process documents
             urls_to_fetch = []
@@ -912,12 +916,12 @@ async def main_async():
 
     # Initialize the OpenAI client
     client = AsyncOpenAI(
-        api_key="empty",
+        api_key="token-abc123",
         base_url=args.api_base_url,
     )
     # Initialize auxiliary client
     aux_client = AsyncOpenAI(
-        api_key="empty",
+        api_key="token-abc123",
         base_url=args.aux_api_base_url,
     )
     

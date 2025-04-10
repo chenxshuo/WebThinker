@@ -7,7 +7,7 @@ from tqdm import tqdm
 import time
 import concurrent
 from concurrent.futures import ThreadPoolExecutor
-from typing import Optional, List, Dict, Union
+from typing import Optional, List, Dict, Union, Tuple
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -109,7 +109,8 @@ class BraveSearchClient:
                 'id': idx + 1,
                 'title': result.get('title', ''),
                 'url': result.get('url', ''),
-                'description': result.get('description', ''),
+                'site_name': result.get('meta_url', '').get('hostname', ''),
+                'snippet': result.get('description', ''),
                 'language': result.get('language', ''),
                 'family_friendly': result.get('family_friendly', True),
                 'reading_time': result.get('reading_time', None)
@@ -128,7 +129,7 @@ class BraveSearchClient:
 
 async def brave_search_async(query: str, api_key: Optional[str] = None, top_k: int = 10,
                       country: str = 'us', language: str = 'en',
-                      timeout: int = 20) -> Dict:
+                      timeout: int = 20) -> Tuple[Dict, List[Dict]]:
     """
     Perform an asynchronous search using the Brave Search API.
     
@@ -144,7 +145,7 @@ async def brave_search_async(query: str, api_key: Optional[str] = None, top_k: i
     """
     client = BraveSearchClient(api_key)
     response = client.search(query, country, language, timeout)
-    return client.extract_search_results(response)[:top_k]
+    return response, client.extract_search_results(response)[:top_k]
 
 def batch_search(queries: List[str], api_key: Optional[str] = None,
                 max_workers: int = 5, show_progress: bool = True) -> Dict[str, Dict]:
