@@ -20,8 +20,12 @@ from search.bing_search import (
     fetch_page_content, 
     fetch_page_content_async,
     extract_snippet_with_context,
-    bing_web_search_async
 )
+
+from search.brave_search import (
+    brave_search_async
+)
+
 from evaluate.evaluate import (
     run_evaluation, 
     extract_answer_fn
@@ -301,17 +305,14 @@ async def generate_deep_web_explorer(
                     results = search_cache[new_query]
                 else:
                     try:
-                        # results = bing_web_search(new_query, args.bing_subscription_key, args.bing_endpoint)
-                        results = await bing_web_search_async(new_query, args.bing_subscription_key, args.bing_endpoint)
+                        results = await brave_search_async(new_query, args.brave_api_key, args.top_k,country='us', language='en', timeout=20)
                         search_cache[new_query] = results
                     except Exception as e:
                         print(f"Error during search query '{new_query}': {e}")
                         results = {}
                 print('- Searched for:', new_query)
 
-                relevant_info = extract_relevant_info(results)[:args.top_k]
-
-                formatted_documents = format_search_results(relevant_info)
+                formatted_documents = format_search_results(results)
                 
                 # Append search results
                 search_result = f"\n{BEGIN_SEARCH_RESULT}\n{formatted_documents}\n{END_SEARCH_RESULT}\n"
@@ -635,8 +636,7 @@ async def process_single_sequence(
                 results = search_cache[search_query]
             else:
                 try:
-                    # results = bing_web_search(search_query, args.bing_subscription_key, args.bing_endpoint)
-                    results = await bing_web_search_async(search_query, args.bing_subscription_key, args.bing_endpoint)
+                    results = await brave_search_async(search_query, args.brave_api_key, country='us', language='en', timeout=20)
                     search_cache[search_query] = results
                 except Exception as e:
                     print(f"Error during search query '{search_query}': {e}")
