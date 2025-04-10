@@ -10,6 +10,7 @@ if [[ "$(python --version | cut -d'.' -f2)" -gt 10 ]]; then
 fi
 
 uv venv .venv 
+# uv venv .venv -p 3.10
 source .venv/bin/activate
 uv pip install -r requirements.txt
 
