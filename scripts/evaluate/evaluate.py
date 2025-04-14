@@ -474,12 +474,12 @@ def run_evaluation(filtered_data, input_list, output_list, task_type, output_dir
     overall_metrics['domain_metrics'] = domain_metrics_final
     
     print(overall_metrics)
-    
+
     # Save prediction results and metrics
-    with open(os.path.join(output_dir, output_metrics_path), mode='w', encoding='utf-8') as json_file:
+    with open(os.path.join(output_metrics_path), mode='w', encoding='utf-8') as json_file:
         json.dump(filtered_data, json_file, indent=4, ensure_ascii=False)
 
-    with open(os.path.join(output_dir, output_metrics_overall_path), mode='w', encoding='utf-8') as json_file:
+    with open(os.path.join(output_metrics_overall_path), mode='w', encoding='utf-8') as json_file:
         json.dump(overall_metrics, json_file, indent=4, ensure_ascii=False)
 
 

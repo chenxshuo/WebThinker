@@ -23,7 +23,8 @@ from search.bing_search import (
 )
 
 from search.brave_search import (
-    brave_search_async
+    brave_search_async,
+    BraveSearchClient
 )
 
 from evaluate.evaluate import (
@@ -311,7 +312,7 @@ async def generate_deep_web_explorer(
                     results = search_cache[new_query]
                 else:
                     try:
-                        results, relevant_info = await brave_search_async(new_query, args.brave_api_key, args.top_k,country='us', language='en', timeout=20)
+                        results = await brave_search_async(new_query, args.brave_api_key, country='us', language='en', timeout=20)
                         search_cache[new_query] = results
                     except Exception as e:
                         print(f"Error during search query '{new_query}': {e}")
@@ -642,13 +643,14 @@ async def process_single_sequence(
                 results = search_cache[search_query]
             else:
                 try:
-                    results, relevant_info = await brave_search_async(search_query, api_key=os.getenv('BRAVE_API_KEY'), top_k=args.top_k, country='us', language='en', timeout=20)
+                    results = await brave_search_async(search_query, api_key=os.getenv('BRAVE_API_KEY'), country='us', language='en', timeout=20)
                     search_cache[search_query] = results
                 except Exception as e:
                     print(f"Error during search query '{search_query}': {e}")
                     results = {}
             print(f'---Searched for:---\n{search_query}\n')
 
+            relevant_info = BraveSearchClient.extract_search_results(results)
             # Process documents
             urls_to_fetch = []
             for doc_info in relevant_info:

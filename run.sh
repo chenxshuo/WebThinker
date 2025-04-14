@@ -1,5 +1,5 @@
 
-# make sure to server using VLLM
+# make sure to first server using VLLM
 python scripts/run_web_thinker_report_brave_search.py \
     --single_question "What are the models of OpenAI and what are the differences?" \
     --api_base_url "http://localhost:8000/v1" \

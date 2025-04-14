@@ -89,7 +89,8 @@ class BraveSearchClient:
                 
         return {"error": "All retry attempts failed"}
 
-    def extract_search_results(self, response: Dict) -> List[Dict]:
+    @staticmethod
+    def extract_search_results(response: Dict) -> List[Dict]:
         """
         Extract relevant information from Brave search results.
         
@@ -127,9 +128,9 @@ class BraveSearchClient:
             
         return results
 
-async def brave_search_async(query: str, api_key: Optional[str] = None, top_k: int = 10,
+async def brave_search_async(query: str, api_key: Optional[str] = None,
                       country: str = 'us', language: str = 'en',
-                      timeout: int = 20) -> Tuple[Dict, List[Dict]]:
+                      timeout: int = 20) -> Dict:
     """
     Perform an asynchronous search using the Brave Search API.
     
@@ -145,7 +146,7 @@ async def brave_search_async(query: str, api_key: Optional[str] = None, top_k: i
     """
     client = BraveSearchClient(api_key)
     response = client.search(query, country, language, timeout)
-    return response, client.extract_search_results(response)[:top_k]
+    return response
 
 def batch_search(queries: List[str], api_key: Optional[str] = None,
                 max_workers: int = 5, show_progress: bool = True) -> Dict[str, Dict]:
@@ -184,7 +185,6 @@ def batch_search(queries: List[str], api_key: Optional[str] = None,
 
 
 def test_brave_search():
-    from scripts.search.brave_search import BraveSearchClient
     # Create client (will use BRAVE_API_KEY from environment)
     client = BraveSearchClient()
 
