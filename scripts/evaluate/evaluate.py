@@ -140,7 +140,7 @@ async def llm_evaluate_equivalence_batch(
         model_name = "Qwen2.5-72B-Instruct"
 
     client = AsyncOpenAI(
-        api_key=api_key,
+        api_key="",
         base_url=api_base_url,
     )
 
@@ -476,11 +476,18 @@ def run_evaluation(filtered_data, input_list, output_list, task_type, output_dir
     print(overall_metrics)
     
     # Save prediction results and metrics
-    with open(os.path.join(output_dir, output_metrics_path), mode='w', encoding='utf-8') as json_file:
+    # with open(os.path.join(output_dir, output_metrics_path), mode='w', encoding='utf-8') as json_file:
+    #     json.dump(filtered_data, json_file, indent=4, ensure_ascii=False)
+    #
+    # with open(os.path.join(output_dir, output_metrics_overall_path), mode='w', encoding='utf-8') as json_file:
+    #     json.dump(overall_metrics, json_file, indent=4, ensure_ascii=False)
+
+    with open(os.path.join(output_metrics_path), mode='w', encoding='utf-8') as json_file:
         json.dump(filtered_data, json_file, indent=4, ensure_ascii=False)
 
-    with open(os.path.join(output_dir, output_metrics_overall_path), mode='w', encoding='utf-8') as json_file:
+    with open(os.path.join(output_metrics_overall_path), mode='w', encoding='utf-8') as json_file:
         json.dump(overall_metrics, json_file, indent=4, ensure_ascii=False)
+
 
 
 if __name__ == "__main__":
