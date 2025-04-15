@@ -360,7 +360,7 @@ async def generate_deep_web_explorer(
                         content = await fetch_page_content_async(
                             [url], 
                             use_jina=args.use_jina, 
-                            jina_api_key=args.jina_api_key, 
+                            jina_api_key=os.getenv('JINA_API_KEY'), 
                             keep_links=args.keep_links
                         )
                         content = content[url]
@@ -666,7 +666,7 @@ async def process_single_sequence(
                     contents = await fetch_page_content_async(
                         urls_to_fetch, 
                         use_jina=args.use_jina, 
-                        jina_api_key=args.jina_api_key, 
+                        jina_api_key=os.getenv('JINA_API_KEY'), 
                         keep_links=args.keep_links
                     )
                     for url, content in contents.items():
@@ -839,7 +839,7 @@ async def main_async():
     np.random.seed(args.seed)
 
     if args.jina_api_key == 'None':
-        jina_api_key = None
+        jina_api_key = os.getenv('JINA_API_KEY')
 
     # Modified data loading section
     if args.single_question:
