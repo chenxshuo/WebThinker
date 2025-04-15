@@ -33,14 +33,14 @@ def extract_answer_fn(output, mode='qa', extract_answer=False):
         if "</think>\n" in output:
             extracted_text = output.split("</think>\n")[-1].split("<|begin_click_link|>")[0].replace(pattern_info, "").strip(':**').strip('\n').strip("```").strip()  # 提取</think>后面的内容
             if mode == 'infogen':
-                extracted_text = '\n'.join(extracted_text.replace("\n\n", "\n").split('\n')[:5])  # 只保留前5行
+                extracted_text = '\n'.join(extracted_text.replace("\n\n", "\n").split('\n')[:5])
         elif pattern_info in output:
-            extracted_text = output.split(pattern_info)[-1].split("<|begin_click_link|>")[0].strip('\n').strip(':**').strip("```").strip()  # 提取**Final Information**后面的内容
+            extracted_text = output.split(pattern_info)[-1].split("<|begin_click_link|>")[0].strip('\n').strip(':**').strip("```").strip()
             if mode == 'infogen':
-                extracted_text = '\n'.join(extracted_text.replace("\n\n", "\n").split('\n')[:5])  # 只保留前5行
+                extracted_text = '\n'.join(extracted_text.replace("\n\n", "\n").split('\n')[:5]) 
         else:
             # extracted_text = "No helpful information found."
-            extracted_text = '\n'.join(output.strip().replace("</think>\n", "").replace("\n\n", "\n").split('\n')[-5:])  # 若没提取到，只保留最后5行
+            extracted_text = '\n'.join(output.strip().replace("</think>\n", "").replace("\n\n", "\n").split('\n')[-5:])
         if mode == 'research':
             extracted_text = extracted_text[:6000]
         else:
@@ -140,7 +140,7 @@ async def llm_evaluate_equivalence_batch(
         model_name = "Qwen2.5-72B-Instruct"
 
     client = AsyncOpenAI(
-        api_key=api_key,
+        api_key="",
         base_url=api_base_url,
     )
 
@@ -481,6 +481,7 @@ def run_evaluation(filtered_data, input_list, output_list, task_type, output_dir
 
     with open(os.path.join(output_metrics_overall_path), mode='w', encoding='utf-8') as json_file:
         json.dump(overall_metrics, json_file, indent=4, ensure_ascii=False)
+
 
 
 if __name__ == "__main__":

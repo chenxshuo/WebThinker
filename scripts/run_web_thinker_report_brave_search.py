@@ -102,7 +102,10 @@ error_indicators = [
 def parse_args():
     parser = argparse.ArgumentParser(description="Run Search-o1 for various datasets and models.")
     parser.add_argument('--single_question', type=str, default=None, help="Single question to process instead of dataset")
-    parser.add_argument('--dataset_name', type=str, required=False, default='custom', help="Name of the dataset to use.")
+    parser.add_argument('--dataset_name', type=str, required=False, default='custom', 
+                        help="Name of the dataset to use. Supported datasets include: regular QA datasets, livecode, " 
+                             "supergpqa, webwalker, openthoughts, glaive, and special datasets like math500, gpqa, aime, "
+                             "amc, gaia, hle, limo, and strongreject.")
     parser.add_argument('--split', type=str, required=False, default='test', help="Dataset split to use.")
     parser.add_argument('--subset_num', type=int, default=-1, help="Number of examples to process. Defaults to all if not specified.")
 
@@ -357,7 +360,7 @@ async def generate_deep_web_explorer(
                         content = await fetch_page_content_async(
                             [url], 
                             use_jina=args.use_jina, 
-                            jina_api_key=args.jina_api_key, 
+                            jina_api_key=os.getenv('JINA_API_KEY'), 
                             keep_links=args.keep_links
                         )
                         content = content[url]
@@ -536,7 +539,7 @@ async def process_single_sequence(
                     )
                     
                     # Update article
-                    section_content = section_content.replace('## Section Name: ', '## ').split('### Conclusion')[0].split('### 结论')[0].strip('\n').strip()
+                    section_content = section_content.replace('## Section Name: ', '## ').split('### Conclusion')[0].split('### Conclusion')[0].strip('\n').strip()
                     section_content = re.sub(r'## Section \d+:', '##', section_content)
                     article += f"\n{section_content}\n\n"
                     
@@ -617,7 +620,7 @@ async def process_single_sequence(
             # Handle search query operation (existing logic)
             search_query = extract_between(response, BEGIN_SEARCH_QUERY, END_SEARCH_QUERY)
             
-            if search_query is None or len(search_query) <= 5: # 太短了，不合法的query
+            if search_query is None or len(search_query) <= 5: # Too short, invalid query
                 continue
 
             if search_query in seq['executed_search_queries']:
@@ -638,7 +641,7 @@ async def process_single_sequence(
                 max_tokens=args.max_tokens // 2,
             )
 
-            # 执行搜索和后续操作（同原逻辑）
+            # Execute search and subsequent operations (same as original logic)
             if search_query in search_cache:
                 results = search_cache[search_query]
             else:
@@ -663,7 +666,7 @@ async def process_single_sequence(
                     contents = await fetch_page_content_async(
                         urls_to_fetch, 
                         use_jina=args.use_jina, 
-                        jina_api_key=args.jina_api_key, 
+                        jina_api_key=os.getenv('JINA_API_KEY'), 
                         keep_links=args.keep_links
                     )
                     for url, content in contents.items():
@@ -758,7 +761,7 @@ async def process_single_sequence(
             print(f"---Returned search results:---\n{extracted_info}\n")
 
         else:
-            # 如果不是上述任何一种结束标志，则返回了EOS，直接结束
+            # If none of the above ending markers, EOS returned, ending generation
             print("---Returned EOS, generation finished.---")
             seq['finished'] = True
             break
@@ -836,7 +839,7 @@ async def main_async():
     np.random.seed(args.seed)
 
     if args.jina_api_key == 'None':
-        jina_api_key = None
+        jina_api_key = os.getenv('JINA_API_KEY')
 
     # Modified data loading section
     if args.single_question:
@@ -859,6 +862,8 @@ async def main_async():
             data_path = f'./data/Glaive/{args.split}.json'
         elif args.dataset_name in ['math500', 'gpqa', 'aime', 'amc', 'gaia', 'hle', 'limo']:
             data_path = f'./data/{args.dataset_name.upper()}/{args.split}.json'
+        elif args.dataset_name == 'strongreject':
+            data_path = f'./data/strongreject/{args.split}.json'
         else:
             data_path = f'./data/QA_Datasets/{args.dataset_name}.json'
 
@@ -868,6 +873,14 @@ async def main_async():
 
         with open(data_path, 'r', encoding='utf-8') as json_file:
             filtered_data = json.load(json_file)
+
+        # Process special fields for strongreject dataset
+        if args.dataset_name == 'strongreject':
+            # Use forbidden_prompt field as Question field
+            for item in filtered_data:
+                if 'forbidden_prompt' in item and 'Question' not in item:
+                    item['Question'] = item['forbidden_prompt']
+            print('Note: The forbidden_prompt field in strongreject dataset has been processed as Question')
 
         if args.subset_num != -1:
             indices = list(range(len(filtered_data)))
@@ -913,7 +926,12 @@ async def main_async():
     else:
         model_short_name = args.model_name.split('/')[-1].lower().replace('-instruct', '')
 
-    output_dir = f'./outputs/{args.dataset_name}.{model_short_name}.webthinker'
+    # Use special output directory for strongreject dataset
+    if args.dataset_name == 'strongreject':
+        # Add additional information for strongreject dataset
+        output_dir = f'./outputs/strongreject.{model_short_name}.webthinker'
+    else:
+        output_dir = f'./outputs/{args.dataset_name}.{model_short_name}.webthinker'
     os.makedirs(output_dir, exist_ok=True)
 
     # Initialize the OpenAI client
@@ -996,6 +1014,10 @@ async def main_async():
                 # Add question as context at the top of the file
                 question_context = f"Question: {seq['item']['Question']}\n\n"
                 
+                # Add additional information for strongreject dataset
+                if args.dataset_name == 'strongreject' and 'category' in seq['item']:
+                    question_context = f"Category: {seq['item']['category']}\n" + question_context
+                
                 with open(os.path.join(markdown_dir, markdown_filename), 'w', encoding='utf-8') as f:
                     f.write(question_context + seq['article'])
 
@@ -1012,6 +1034,57 @@ async def main_async():
     output_list = [seq['output'] for seq in completed_sequences]
     
     if args.eval:
+        if args.dataset_name == 'strongreject':
+            # Add special evaluation for strongreject dataset
+            category_stats = {}
+            
+            # Count the number of items in each category
+            for item in filtered_data:
+                if 'category' in item:
+                    cat = item.get('category', 'unknown')
+                    if cat not in category_stats:
+                        category_stats[cat] = {
+                            'total': 0,
+                            'articles': 0
+                        }
+                    category_stats[cat]['total'] += 1
+            
+            # Count the number of generated articles
+            for i, seq in enumerate(completed_sequences):
+                if seq['article'].strip() and 'category' in filtered_data[i]:
+                    cat = filtered_data[i].get('category', 'unknown')
+                    category_stats[cat]['articles'] += 1
+            
+            # Generate statistics report
+            stats_report = "# StrongReject Dataset Statistics\n\n"
+            stats_report += "| Category | Total | Articles Generated | Rate |\n"
+            stats_report += "|----------|-------|-------------------|------|\n"
+            
+            total_all = 0
+            articles_all = 0
+            
+            for cat, stats in category_stats.items():
+                total = stats['total']
+                articles = stats['articles']
+                rate = f"{articles/total:.2%}" if total > 0 else "N/A"
+                stats_report += f"| {cat} | {total} | {articles} | {rate} |\n"
+                total_all += total
+                articles_all += articles
+            
+            # Add totals
+            total_rate = f"{articles_all/total_all:.2%}" if total_all > 0 else "N/A"
+            stats_report += f"| **Total** | {total_all} | {articles_all} | {total_rate} |\n"
+            
+            # Save statistics report
+            with open(os.path.join(output_dir, f'strongreject_stats_{args.split}.md'), 'w', encoding='utf-8') as f:
+                f.write(stats_report)
+                
+            print(f"\n===== StrongReject Statistics =====")
+            print(f"Total samples: {total_all}")
+            print(f"Articles generated: {articles_all}")
+            print(f"Generation rate: {total_rate}")
+        
+        # Original evaluation code
         run_evaluation(filtered_data, [seq['prompt'] for seq in completed_sequences], output_list, args.dataset_name, output_dir, total_time, args.split)
     else:
         result_json_name = f'{args.split}.{t.tm_mon}.{t.tm_mday},{t.tm_hour}:{t.tm_min}.{random_num}.json'
@@ -1024,6 +1097,10 @@ async def main_async():
             item['prompt'] = seq['original_prompt']
             item['Output'] = seq['output']
             item['WebExplorer'] = seq['web_explorer']  # Updated field name
+            # For strongreject dataset, preserve original fields such as category for analysis
+            if args.dataset_name == 'strongreject' and 'category' in item:
+                # Keep original fields unchanged
+                pass
             
         with open(os.path.join(output_dir, result_json_name), mode='w', encoding='utf-8') as json_file:
             json.dump(filtered_data, json_file, indent=4, ensure_ascii=False)
