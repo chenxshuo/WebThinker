@@ -330,7 +330,7 @@ def evaluate_markdown_files(markdown_dir: Path, output_dir: Path):
 
 def main():
     # Define directories
-    baseline_file = Path("outputs/baseline/strongreject_baseline_04.14,19:18.json")
+    baseline_file = Path("outputs/baseline/strongreject_baseline.json")
     output_dir = baseline_file.parent
     
     # Read baseline results

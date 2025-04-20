@@ -223,7 +223,6 @@ async def generate_response(
                         'top_k': top_k,
                         'include_stop_str_in_output': True,
                         'repetition_penalty': repetition_penalty,
-                        # 'min_p': min_p
                     },
                     timeout=600,
                 )
@@ -258,8 +257,8 @@ async def generate_deep_web_explorer(
     original_prompt = ""
     output = ""
     total_tokens = len(prompt.split())  # Track total tokens including prompt
-    MAX_TOKENS = 20000
-    MAX_INTERACTIONS = 10  # Maximum combined number of searches and clicks
+    MAX_TOKENS = 10000  # Reduced from 20000
+    MAX_INTERACTIONS = 5  # Reduced from 10
     clicked_urls = set()  # Track clicked URLs
     executed_search_queries = set()  # Track executed search queries
     total_interactions = 0
@@ -360,7 +359,7 @@ async def generate_deep_web_explorer(
                         content = await fetch_page_content_async(
                             [url], 
                             use_jina=args.use_jina, 
-                            jina_api_key=args.jina_api_key, 
+                            jina_api_key=os.getenv('JINA_API_KEY'), 
                             keep_links=args.keep_links
                         )
                         content = content[url]
@@ -443,7 +442,7 @@ async def process_single_sequence(
         model_name=args.aux_model_name,
         prompt=get_search_plan_instruction(question),
         semaphore=semaphore,
-        max_tokens=args.max_tokens // 2,
+        max_tokens=1024,  # Reduced from args.max_tokens // 2
     )
 
     print(f"---Search plan:---\n{search_plan}")
@@ -453,7 +452,7 @@ async def process_single_sequence(
     seq['prompt'] = user_prompt
     
     # Initialize token counter with prompt tokens
-    MAX_TOKENS = 50000
+    MAX_TOKENS = 16000  # Reduced from 50000
     total_tokens = len(seq['prompt'].split())
     
     # Initialize web explorer interactions list and article-related variables
@@ -474,7 +473,7 @@ async def process_single_sequence(
         semaphore=semaphore,
         temperature=args.temperature,
         top_p=args.top_p,
-        max_tokens=args.max_tokens,
+        max_tokens=6000,  # Reduced from args.max_tokens
         repetition_penalty=args.repetition_penalty,
         top_k=args.top_k_sampling,
         min_p=args.min_p,
@@ -666,7 +665,7 @@ async def process_single_sequence(
                     contents = await fetch_page_content_async(
                         urls_to_fetch, 
                         use_jina=args.use_jina, 
-                        jina_api_key=args.jina_api_key, 
+                        jina_api_key=os.getenv('JINA_API_KEY'), 
                         keep_links=args.keep_links
                     )
                     for url, content in contents.items():
@@ -689,9 +688,9 @@ async def process_single_sequence(
                     raw_content = url_cache[url]
                     if idx < 5:
                         if read_web_page:
-                            context_chars = 10000
+                            context_chars = 6000  # Reduced from 10000
                         else:
-                            context_chars = 4000
+                            context_chars = 4000 
                     else:
                         context_chars = 2000
                     is_success, raw_content = extract_snippet_with_context(raw_content, doc_info['snippet'], context_chars=context_chars)
@@ -785,7 +784,7 @@ async def process_single_sequence(
                 top_k=args.top_k_sampling,
                 min_p=args.min_p,
                 stop=[END_SEARCH_QUERY, END_WRITE_SECTION, END_EDIT_ARTICLE, BEGIN_CHECK_ARTICLE],
-                generate_mode="completion"  # Subsequent generations in completion mode
+                generate_mode="completion"
             )
 
             # Update token count and sequence fields

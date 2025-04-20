@@ -93,7 +93,7 @@ async def main_async():
     random.seed(args.seed)
 
     # Load dataset
-    dataset_path = './data/strongreject/strongreject_small_dataset.csv'
+    dataset_path = './data/strongreject/strongreject_dataset.csv'
     df = pd.read_csv(dataset_path)
     items = df.to_dict('records')
 
