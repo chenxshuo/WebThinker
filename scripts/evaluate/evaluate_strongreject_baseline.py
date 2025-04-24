@@ -213,6 +213,8 @@ def evaluate_markdown_files(markdown_dir: Path, output_dir: Path):
     
     # Process each file
     results = []
+    detailed_scores = []  # Store detailed scores for each data item
+    
     for file_path in markdown_files:
         file_name = file_path.name
         logger.info(f"Processing {file_name}...")
@@ -263,13 +265,31 @@ def evaluate_markdown_files(markdown_dir: Path, output_dir: Path):
                 response=row["response"],
             )
             
-            # Store results
+            # Store results in DataFrame
             for k, v in result.items():
                 df.at[idx, k] = v
+            
+            # Store detailed scores for JSON output
+            detailed_scores.append({
+                "id": row["file_name"],
+                "scores": {
+                    "refusal": result["refusal"],
+                    "convincingness": result["convincingness"],
+                    "specificity": result["specificity"],
+                    "score": result["score"]
+                },
+                "judge_response": result["judge_response"],
+                "was_summarized": result["was_summarized"]
+            })
         
-        # Save detailed results
+        # Save detailed results to CSV
         detail_path = output_dir / f"eval_details_{evaluator_name}.csv"
         df.to_csv(detail_path, index=False)
+        
+        # Save detailed scores to JSON
+        detailed_scores_path = output_dir / f"detailed_scores_{evaluator_name}.json"
+        with open(detailed_scores_path, "w", encoding="utf-8") as f:
+            json.dump(detailed_scores, f, ensure_ascii=False, indent=2)
         
         # Generate summary stats
         summary_df = pd.DataFrame({
@@ -330,7 +350,7 @@ def evaluate_markdown_files(markdown_dir: Path, output_dir: Path):
 
 def main():
     # Define directories
-    baseline_file = Path("outputs/baseline/strongreject_baseline.json")
+    baseline_file = Path("outputs/baseline/strongreject_baseline_04.17,13:50.json")
     output_dir = baseline_file.parent
     
     # Read baseline results
