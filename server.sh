@@ -4,7 +4,24 @@ nohup vllm serve Qwen/QwQ-32B --dtype auto --api-key token-abc123 --tensor-paral
 #vllm serve Qwen/QwQ-32B --dtype auto --api-key token-abc123 --tensor-parallel-size 2
 
 
+#nohup vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --dtype auto --api-key token-abc123 --tensor-parallel-size 2 > server.log 2>&1 &
 #vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --dtype auto --api-key token-abc123 --tensor-parallel-size 2
+
+
+#nohup vllm serve deepseek-ai/DeepSeek-R1-Distill-Llama-70B --dtype auto --api-key token-abc123 --tensor-parallel-size 4 > server.log 2>&1 &
 #vllm serve deepseek-ai/DeepSeek-R1-Distill-Llama-70B --dtype auto --api-key token-abc123 --tensor-parallel-size 4
 
+
+#nohup vllm serve Qwen/Qwen2.5-72B-Instruct --dtype auto --api-key token-abc123 --tensor-parallel-size 4 > server.log 2>&1 &
+#vllm serve Qwen/Qwen2.5-72B-Instruct --dtype auto --api-key token-abc123 --tensor-parallel-size 4
+
+
+
+
+
+
+
+#vllm serve Qwen/QwQ-32B --dtype auto --api-key token-abc123 --tensor-parallel-size 2
+#vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --dtype auto --api-key token-abc123 --tensor-parallel-size 2
+#vllm serve deepseek-ai/DeepSeek-R1-Distill-Llama-70B --dtype auto --api-key token-abc123 --tensor-parallel-size 4
 #vllm serve Qwen/Qwen2.5-72B-Instruct --dtype auto --api-key token-abc123 --tensor-parallel-size 4

@@ -549,10 +549,21 @@ def evaluate_markdown_files(markdown_dir: Path, output_dir: Path, existing_ids=N
     logger.info("All evaluations finished.")
 
 def main():
-    # Define directories and files
-    baseline_file = Path("outputs/baseline/strongreject_baseline_04.17,13:50.json")
-    output_dir = Path("outputs/baseline")
-    metrics_file = Path("outputs/strongreject.qwq.webthinker/markdown.full.4.20,22:48.60/eval_metrics_all_ids_DeepReject_DeepReject_vllm.csv")
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description="Evaluate baseline models using DeepReject metrics")
+    parser.add_argument("--markdown_dir", type=str, required=True, help="Directory containing markdown files")
+    parser.add_argument("--output_dir", type=str, required=True, help="Directory to save evaluation results")
+    parser.add_argument("--metrics_file", type=str, required=True, help="Path to metrics CSV file with file_exists column")
+    parser.add_argument("--baseline_file", type=str, required=True, help="Path to baseline JSON file with model responses")
+    
+    # Parse arguments
+    args = parser.parse_args()
+    
+    # Convert string paths to Path objects
+    markdown_dir = Path(args.markdown_dir)
+    output_dir = Path(args.output_dir)
+    metrics_file = Path(args.metrics_file)
+    baseline_file = Path(args.baseline_file)
     
     # Create output directory if it doesn't exist
     output_dir.mkdir(parents=True, exist_ok=True)

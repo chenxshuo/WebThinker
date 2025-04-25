@@ -15,9 +15,9 @@ import aiohttp
 from openai import AsyncOpenAI
 
 from search.bing_search import (
-    bing_web_search, 
-    extract_relevant_info, 
-    fetch_page_content, 
+    bing_web_search,
+    extract_relevant_info,
+    fetch_page_content,
     fetch_page_content_async,
     extract_snippet_with_context,
 )
@@ -28,7 +28,7 @@ from search.brave_search import (
 )
 
 from evaluate.evaluate import (
-    run_evaluation, 
+    run_evaluation,
     extract_answer_fn
 )
 from prompts.prompts import (
@@ -41,7 +41,7 @@ from prompts.prompts_report import (
     get_report_webthinker_instruction,
     get_search_plan_instruction,
     get_deep_web_explorer_instruction,
-    get_write_section_instruction, 
+    get_write_section_instruction,
     get_section_summary_instruction,
     get_edit_article_instruction,
     get_title_instruction,
@@ -54,14 +54,16 @@ from nltk.tokenize import word_tokenize
 import langid
 from transformers import AutoTokenizer
 
-
 from dotenv import load_dotenv
 
 from pathlib import Path
+
 load_dotenv(dotenv_path=Path(__file__).parent.parent / ".env", override=True)
 
-tokenizer = AutoTokenizer.from_pretrained("/dss/dssfs05/pn39qo/pn39qo-dss-0001/.cache/huggingface/hub/models--Qwen--QwQ-32B/snapshots/976055f8c83f394f35dbd3ab09a285a984907bd0")
-aux_tokenizer = AutoTokenizer.from_pretrained("/dss/dssfs05/pn39qo/pn39qo-dss-0001/.cache/huggingface/hub/models--Qwen--QwQ-32B/snapshots/976055f8c83f394f35dbd3ab09a285a984907bd0")
+tokenizer = AutoTokenizer.from_pretrained(
+    "/dss/dssfs05/pn39qo/pn39qo-dss-0001/.cache/huggingface/hub/models--Qwen--QwQ-32B/snapshots/976055f8c83f394f35dbd3ab09a285a984907bd0")
+aux_tokenizer = AutoTokenizer.from_pretrained(
+    "/dss/dssfs05/pn39qo/pn39qo-dss-0001/.cache/huggingface/hub/models--Qwen--QwQ-32B/snapshots/976055f8c83f394f35dbd3ab09a285a984907bd0")
 # aux_tokenizer = AutoTokenizer.from_pretrained("/dss/dssfs05/pn39qo/pn39qo-dss-0001/.cache/huggingface/hub/models--Qwen--Qwen2.5-72B-Instruct/snapshots/495f39366efef23836d0cfae4fbe635880d2be31")
 
 
@@ -83,7 +85,6 @@ END_EDIT_ARTICLE = "<|end_edit_article|>"
 BEGIN_CHECK_ARTICLE = "<|begin_check_article|>"
 END_CHECK_ARTICLE = "<|end_check_article|>"
 
-
 error_indicators = [
     'limit exceeded',
     'Error fetching',
@@ -99,36 +100,45 @@ error_indicators = [
     'Please enable cookies',
 ]
 
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Run Search-o1 for various datasets and models.")
-    parser.add_argument('--single_question', type=str, default=None, help="Single question to process instead of dataset")
-    parser.add_argument('--dataset_name', type=str, required=False, default='custom', 
-                        help="Name of the dataset to use. Supported datasets include: regular QA datasets, livecode, " 
+    parser.add_argument('--single_question', type=str, default=None,
+                        help="Single question to process instead of dataset")
+    parser.add_argument('--dataset_name', type=str, required=False, default='custom',
+                        help="Name of the dataset to use. Supported datasets include: regular QA datasets, livecode, "
                              "supergpqa, webwalker, openthoughts, glaive, and special datasets like math500, gpqa, aime, "
                              "amc, gaia, hle, limo, and strongreject.")
     parser.add_argument('--split', type=str, required=False, default='test', help="Dataset split to use.")
-    parser.add_argument('--subset_num', type=int, default=-1, help="Number of examples to process. Defaults to all if not specified.")
+    parser.add_argument('--subset_num', type=int, default=-1,
+                        help="Number of examples to process. Defaults to all if not specified.")
 
     parser.add_argument('--temperature', type=float, default=0.7, help="Sampling temperature.")
     parser.add_argument('--top_p', type=float, default=0.8, help="Top-p sampling parameter.")
     parser.add_argument('--min_p', type=float, default=0.05, help="Minimum p sampling parameter.")
     parser.add_argument('--top_k_sampling', type=int, default=20, help="Top-k sampling parameter.")
-    parser.add_argument('--repetition_penalty', type=float, default=1.05, help="Repetition penalty. If not set, defaults based on the model.")
-    parser.add_argument('--max_tokens', type=int, default=20000, help="Maximum number of tokens to generate. If not set, defaults based on the model and dataset.")
+    parser.add_argument('--repetition_penalty', type=float, default=1.05,
+                        help="Repetition penalty. If not set, defaults based on the model.")
+    parser.add_argument('--max_tokens', type=int, default=20000,
+                        help="Maximum number of tokens to generate. If not set, defaults based on the model and dataset.")
 
     # parser.add_argument('--max_search_limit', type=int, default=10, help="Maximum number of searches per question.")
     parser.add_argument('--top_k', type=int, default=5, help="Maximum number of search documents to return.")
-    parser.add_argument('--keep_links', action='store_true', default=False, help="Whether to keep links in fetched web content")
+    parser.add_argument('--keep_links', action='store_true', default=False,
+                        help="Whether to keep links in fetched web content")
     parser.add_argument('--use_jina', action='store_true', help="Whether to use Jina API for document fetching.")
     parser.add_argument('--jina_api_key', type=str, default='None', help="Your Jina API Key to Fetch URL Content.")
     # parser.add_argument('--bing_subscription_key', type=str, required=True, help="Bing Search API subscription key.")
     # parser.add_argument('--bing_endpoint', type=str, default="https://api.bing.microsoft.com/v7.0/search", help="Bing Search API endpoint.")
     parser.add_argument('--eval', action='store_true', help="Whether to run evaluation after generation.")
-    parser.add_argument('--seed', type=int, default=None, help="Random seed for generation. If not set, will use current timestamp as seed.")
+    parser.add_argument('--seed', type=int, default=None,
+                        help="Random seed for generation. If not set, will use current timestamp as seed.")
     parser.add_argument('--api_base_url', type=str, required=True, help="Base URL for the API endpoint")
-    parser.add_argument('--aux_api_base_url', type=str, required=True, help="Base URL for the auxiliary model API endpoint")
+    parser.add_argument('--aux_api_base_url', type=str, required=True,
+                        help="Base URL for the auxiliary model API endpoint")
     parser.add_argument('--model_name', type=str, default="QwQ-32B", help="Name of the model to use")
-    parser.add_argument('--aux_model_name', type=str, default="Qwen2.5-72B-Instruct", help="Name of the auxiliary model to use")
+    parser.add_argument('--aux_model_name', type=str, default="Qwen2.5-72B-Instruct",
+                        help="Name of the auxiliary model to use")
     parser.add_argument('--concurrent_limit', type=int, default=32, help="Maximum number of concurrent API calls")
     parser.add_argument('--lora_name', type=str, default=None, help="Name of the LoRA adapter to load")
     parser.add_argument('--lora_path', type=str, default=None, help="Path to the LoRA weights")
@@ -149,20 +159,42 @@ def extract_between(text, start_marker, end_marker):
         print(f"-------------------")
         return None
 
+
 def format_search_results(relevant_info: List[Dict]) -> str:
     """Format search results into a readable string"""
     formatted_documents = ""
-    for i, doc_info in enumerate(relevant_info):
-        doc_info['title'] = doc_info['title'].replace('<b>','').replace('</b>','')
-        doc_info['snippet'] = doc_info['snippet'].replace('<b>','').replace('</b>','')
-        formatted_documents += f"***Web Page {i + 1}:***\n"
-        formatted_documents += json.dumps(doc_info, ensure_ascii=False, indent=2) + "\n"
-        # formatted_documents += f"Title: {doc_info['title']}\n"
-        # formatted_documents += f"URL: {doc_info['url']}\n"
-        # formatted_documents += f"Snippet: {doc_info['snippet']}\n\n"
-        # if 'page_info' in doc_info:
-        #     formatted_documents += f"Web Page Information: {doc_info['page_info']}\n\n\n\n"
+    try:
+        # 检查relevant_info是否为列表
+        if not isinstance(relevant_info, list):
+            print(f"Error: expected list but got {type(relevant_info)}")
+            return f"Error formatting search results: unexpected type {type(relevant_info)}"
+            
+        for i, doc_info in enumerate(relevant_info):
+            # 检查doc_info是否为字典
+            if not isinstance(doc_info, dict):
+                print(f"Warning: Expected dict for doc_info but got {type(doc_info)}: {doc_info}")
+                continue
+                
+            # 安全地处理title字段
+            if 'title' in doc_info and isinstance(doc_info['title'], str):
+                doc_info['title'] = doc_info['title'].replace('<b>','').replace('</b>','')
+            elif 'title' in doc_info:
+                print(f"Warning: title is not a string: {type(doc_info['title'])}")
+                
+            # 安全地处理snippet字段
+            if 'snippet' in doc_info and isinstance(doc_info['snippet'], str):
+                doc_info['snippet'] = doc_info['snippet'].replace('<b>','').replace('</b>','')
+            elif 'snippet' in doc_info:
+                print(f"Warning: snippet is not a string: {type(doc_info['snippet'])}")
+                
+            formatted_documents += f"***Web Page {i + 1}:***\n"
+            formatted_documents += json.dumps(doc_info, ensure_ascii=False, indent=2) + "\n"
+    except Exception as e:
+        print(f"Error in format_search_results: {e}")
+        return f"Error formatting search results: {str(e)}"
+    
     return formatted_documents
+
 
 def extract_markdown_content(text):
     """Extract content between ```markdown and ``` tags."""
@@ -171,6 +203,7 @@ def extract_markdown_content(text):
     if match:
         return match.group(1)
     return text
+
 
 def judge_zh(input_str: str):
     assert isinstance(input_str, str), input_str
@@ -183,21 +216,20 @@ def judge_zh(input_str: str):
         return False
 
 
-
 async def generate_response(
-    client: AsyncOpenAI,
-    prompt: str,
-    semaphore: asyncio.Semaphore,
-    generate_mode: str = "chat",
-    temperature: float = 0.0,
-    top_p: float = 1.0,
-    max_tokens: int = 20000,
-    repetition_penalty: float = 1.0,
-    top_k: int = 1,
-    min_p: float = 0.0,
-    model_name: str = "QwQ-32B",
-    stop: List[str] = [END_SEARCH_QUERY],
-    retry_limit: int = 3,
+        client: AsyncOpenAI,
+        prompt: str,
+        semaphore: asyncio.Semaphore,
+        generate_mode: str = "chat",
+        temperature: float = 0.0,
+        top_p: float = 1.0,
+        max_tokens: int = 20000,
+        repetition_penalty: float = 1.0,
+        top_k: int = 1,
+        min_p: float = 0.0,
+        model_name: str = "QwQ-32B",
+        stop: List[str] = [END_SEARCH_QUERY],
+        retry_limit: int = 3,
 ) -> Tuple[str, str]:
     """Generate a single response with retry logic"""
     for attempt in range(retry_limit):
@@ -206,9 +238,11 @@ async def generate_response(
                 if generate_mode == "chat":
                     messages = [{"role": "user", "content": prompt}]
                     if 'qwq' in model_name.lower():
-                        formatted_prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+                        formatted_prompt = tokenizer.apply_chat_template(messages, tokenize=False,
+                                                                         add_generation_prompt=True)
                     else:
-                        formatted_prompt = aux_tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+                        formatted_prompt = aux_tokenizer.apply_chat_template(messages, tokenize=False,
+                                                                             add_generation_prompt=True)
                 else:
                     formatted_prompt = prompt
 
@@ -238,22 +272,23 @@ async def generate_response(
 
 
 async def generate_deep_web_explorer(
-    client: AsyncOpenAI,
-    aux_client: AsyncOpenAI,
-    question: str,
-    search_query: str,
-    document: str,
-    search_intent: str,
-    args: argparse.Namespace,
-    search_cache: Dict,
-    url_cache: Dict,
-    semaphore: asyncio.Semaphore,
+        client: AsyncOpenAI,
+        aux_client: AsyncOpenAI,
+        question: str,
+        search_query: str,
+        document: str,
+        search_intent: str,
+        args: argparse.Namespace,
+        search_cache: Dict,
+        url_cache: Dict,
+        semaphore: asyncio.Semaphore,
 ) -> Tuple[str, List[Dict], str]:
     """
     Generate deep web exploration with multiple search and click operations
     Returns the output, list of interaction records, and initial prompt
     """
-    prompt = get_deep_web_explorer_instruction(search_query=search_query, search_intent=search_intent, search_result=document)
+    prompt = get_deep_web_explorer_instruction(search_query=search_query, search_intent=search_intent,
+                                               search_result=document)
     original_prompt = ""
     output = ""
     total_tokens = len(prompt.split())  # Track total tokens including prompt
@@ -285,8 +320,8 @@ async def generate_deep_web_explorer(
         if first_generation:
             original_prompt = formatted_prompt
             prompt = formatted_prompt
-        
-        output += response.replace('</think>\n','')
+
+        output += response.replace('</think>\n', '')
         total_tokens = len(prompt.split()) + len(response.split())
         first_generation = False
 
@@ -308,27 +343,36 @@ async def generate_deep_web_explorer(
                     continue
 
                 executed_search_queries.add(new_query)  # Add query to executed set
-                
+
                 # Execute search
                 if new_query in search_cache:
                     results = search_cache[new_query]
                 else:
                     try:
                         results = await brave_search_async(new_query, args.brave_api_key, country='us', language='en', timeout=20)
-                        search_cache[new_query] = results
+                        # 检查结果是否有效
+                        if results and isinstance(results, dict):
+                            search_cache[new_query] = results
+                        else:
+                            print(f"Warning: Invalid results from Brave search API: {type(results)}")
+                            results = {"web": {"results": []}}  # 提供一个空结果结构
                     except Exception as e:
                         print(f"Error during search query '{new_query}': {e}")
-                        results = {}
+                        results = {"web": {"results": []}}  # 错误时提供空结果
                 print('- Searched for:', new_query)
 
-                formatted_documents = format_search_results(results)
-                
+                try:
+                    formatted_documents = format_search_results(BraveSearchClient.extract_search_results(results))
+                except Exception as e:
+                    print(f"Error formatting search results: {e}")
+                    formatted_documents = "Error retrieving search results. Please try a different query."
+
                 # Append search results
                 search_result = f"\n{BEGIN_SEARCH_RESULT}\n{formatted_documents}\n{END_SEARCH_RESULT}\n"
                 output += search_result
                 prompt += output
                 total_tokens += len(search_result.split())
-                
+
         # Check for click link
         elif response.rstrip().endswith(END_CLICK_LINK):
             url = extract_between(response, BEGIN_CLICK_LINK, END_CLICK_LINK)
@@ -357,14 +401,16 @@ async def generate_deep_web_explorer(
                 if url not in url_cache:
                     try:
                         content = await fetch_page_content_async(
-                            [url], 
-                            use_jina=args.use_jina, 
-                            jina_api_key=os.getenv('JINA_API_KEY'), 
+                            [url],
+                            use_jina=args.use_jina,
+                            jina_api_key=os.getenv('JINA_API_KEY'),
                             keep_links=args.keep_links
                         )
                         content = content[url]
                         # Only cache content if it doesn't contain error indicators
-                        has_error = (any(indicator.lower() in content.lower() for indicator in error_indicators) and len(content.split()) < 64) or content == ''
+                        has_error = (any(
+                            indicator.lower() in content.lower() for indicator in error_indicators) and len(
+                            content.split()) < 64) or content == ''
                         if not has_error:
                             url_cache[url] = content
                     except Exception as e:
@@ -375,7 +421,7 @@ async def generate_deep_web_explorer(
 
                 # Check if content has error indicators
                 has_error = any(indicator.lower() in content.lower() for indicator in error_indicators) or content == ''
-                
+
                 if has_error:
                     # If content has error, use it directly as summary
                     summary = "Unable to fetch the page content. You can try other links."
@@ -395,7 +441,7 @@ async def generate_deep_web_explorer(
                 output += click_result
                 prompt += output
                 total_tokens += len(click_result.split())
-        
+
         else:
             finished = True
             break
@@ -423,17 +469,17 @@ async def generate_deep_web_explorer(
 
 
 async def process_single_sequence(
-    seq: Dict,
-    client: AsyncOpenAI,
-    aux_client: AsyncOpenAI,
-    semaphore: asyncio.Semaphore,
-    args: argparse.Namespace,
-    search_cache: Dict,
-    url_cache: Dict,
-    batch_output_records: List[Dict],
+        seq: Dict,
+        client: AsyncOpenAI,
+        aux_client: AsyncOpenAI,
+        semaphore: asyncio.Semaphore,
+        args: argparse.Namespace,
+        search_cache: Dict,
+        url_cache: Dict,
+        batch_output_records: List[Dict],
 ) -> Dict:
     """Process a single sequence through its entire reasoning chain with MAX_TOKENS limit"""
-    
+
     # Generate search plan first
     print(f"Generating search plan...")
     question = seq['item']['Question']
@@ -446,25 +492,25 @@ async def process_single_sequence(
     )
 
     print(f"---Search plan:---\n{search_plan}")
-    
+
     # Generate the full instruction with the plan
     user_prompt = get_report_webthinker_instruction(question, search_plan)
     seq['prompt'] = user_prompt
-    
+
     # Initialize token counter with prompt tokens
     MAX_TOKENS = 16000  # Reduced from 50000
     total_tokens = len(seq['prompt'].split())
-    
+
     # Initialize web explorer interactions list and article-related variables
     seq['web_explorer'] = []
     article = ""
     summarized_article = ""
     document_memory = []  # Store all retrieved web page content
-    
+
     # Initialize BM25 for document retrieval
     tokenized_docs = []
     bm25 = None
-    
+
     # First response uses chat completion
     formatted_prompt, response = await generate_response(
         client=client,
@@ -484,12 +530,12 @@ async def process_single_sequence(
     # Update token count and sequence fields
     tokens_this_response = len(response.split())
     total_tokens += tokens_this_response
-    
+
     seq['output'] += response.replace('</think>\n', '')
     seq['history'].append(response.replace('</think>\n', ''))
     seq['prompt'] = formatted_prompt + response.replace('</think>\n', '')
     seq['original_prompt'] = formatted_prompt
-    
+
     while not seq['finished']:
         # Handle different response endings
         if response.rstrip().endswith(END_WRITE_SECTION):
@@ -502,12 +548,12 @@ async def process_single_sequence(
                     section_name, task = section_parts
                     print(f"---Section name:---\n{section_name}")
                     print(f"---Task:---\n{task}")
-                    
+
                     # Prepare relevant documents using BM25
                     if not bm25 and document_memory:
                         tokenized_docs = [word_tokenize(doc.lower()) for doc in document_memory]
                         bm25 = BM25Okapi(tokenized_docs)
-                    
+
                     if bm25:
                         query = f"{section_name} {task}"
                         tokenized_query = word_tokenize(query.lower())
@@ -518,7 +564,7 @@ async def process_single_sequence(
                             relevant_documents += f"Document {i}:\n{document_memory[idx]}\n\n"
                     else:
                         relevant_documents = ""
-                        
+
                     # Generate section content
                     section_prompt = get_write_section_instruction(
                         question=question,
@@ -528,7 +574,7 @@ async def process_single_sequence(
                         task=task,
                         current_article=summarized_article
                     )
-                    
+
                     _, section_content = await generate_response(
                         client=aux_client,
                         prompt=section_prompt,
@@ -536,12 +582,14 @@ async def process_single_sequence(
                         model_name=args.aux_model_name,
                         max_tokens=args.max_tokens // 4,
                     )
-                    
+
                     # Update article
-                    section_content = section_content.replace('## Section Name: ', '## ').split('### Conclusion')[0].split('### Conclusion')[0].strip('\n').strip()
+                    section_content = \
+                    section_content.replace('## Section Name: ', '## ').split('### Conclusion')[0].split(
+                        '### Conclusion')[0].strip('\n').strip()
                     section_content = re.sub(r'## Section \d+:', '##', section_content)
                     article += f"\n{section_content}\n\n"
-                    
+
                     """# Generate section summary
                     summary_prompt = get_section_summary_instruction(section_content)
                     _, section_summary = await generate_response(
@@ -551,7 +599,7 @@ async def process_single_sequence(
                         model_name=args.aux_model_name,
                         max_tokens=args.max_tokens // 2,
                     )
-                    
+
                     summarized_article += f"\n{section_summary}\n\n"""
 
                     # Extract outline by finding all headers
@@ -590,7 +638,7 @@ async def process_single_sequence(
                         f"{BEGIN_CHECK_ARTICLE}{old_check}{END_CHECK_ARTICLE}",
                         f"{BEGIN_CHECK_ARTICLE}folded{END_CHECK_ARTICLE}"
                     )
-            
+
             # Check and add title if needed
             if not article.strip('\n').strip().startswith("# "):
                 title_prompt = get_title_instruction(question, article)
@@ -604,7 +652,7 @@ async def process_single_sequence(
                 title = title.replace('\n', '').strip('"').strip("'").strip()
                 article = f"# {title}\n\n{article}"
                 summarized_article = f"# {title}\n\n{summarized_article}"
-            
+
             # Append summarized article to prompt
             append_text = f"{summarized_article}{END_CHECK_ARTICLE}\n\n"
             seq['prompt'] += append_text
@@ -618,8 +666,8 @@ async def process_single_sequence(
         elif response.rstrip().endswith(END_SEARCH_QUERY):
             # Handle search query operation (existing logic)
             search_query = extract_between(response, BEGIN_SEARCH_QUERY, END_SEARCH_QUERY)
-            
-            if search_query is None or len(search_query) <= 5: # Too short, invalid query
+
+            if search_query is None or len(search_query) <= 5:  # Too short, invalid query
                 continue
 
             if search_query in seq['executed_search_queries']:
@@ -646,13 +694,26 @@ async def process_single_sequence(
             else:
                 try:
                     results = await brave_search_async(search_query, api_key=os.getenv('BRAVE_API_KEY'), country='us', language='en', timeout=20)
-                    search_cache[search_query] = results
+                    # 检查结果是否有效
+                    if results and isinstance(results, dict):
+                        search_cache[search_query] = results
+                    else:
+                        print(f"Warning: Invalid results from Brave search API: {type(results)}")
+                        results = {"web": {"results": []}}  # 提供一个空结果结构
                 except Exception as e:
                     print(f"Error during search query '{search_query}': {e}")
-                    results = {}
+                    results = {"web": {"results": []}}  # 错误时提供空结果
             print(f'---Searched for:---\n{search_query}\n')
 
-            relevant_info = BraveSearchClient.extract_search_results(results)
+            try:
+                relevant_info = BraveSearchClient.extract_search_results(results)
+                if not isinstance(relevant_info, list):
+                    print(f"Warning: extract_search_results returned non-list: {type(relevant_info)}")
+                    relevant_info = []  # 确保是列表类型
+            except Exception as e:
+                print(f"Error extracting search results: {e}")
+                relevant_info = []  # 出错时提供空列表
+
             # Process documents
             urls_to_fetch = []
             for doc_info in relevant_info:
@@ -663,14 +724,16 @@ async def process_single_sequence(
             if urls_to_fetch:
                 try:
                     contents = await fetch_page_content_async(
-                        urls_to_fetch, 
-                        use_jina=args.use_jina, 
-                        jina_api_key=os.getenv('JINA_API_KEY'), 
+                        urls_to_fetch,
+                        use_jina=args.use_jina,
+                        jina_api_key=os.getenv('JINA_API_KEY'),
                         keep_links=args.keep_links
                     )
                     for url, content in contents.items():
                         # Only cache content if it doesn't contain error indicators
-                        has_error = (any(indicator.lower() in content.lower() for indicator in error_indicators) and len(content.split()) < 64) or len(content) < 50 or len(content.split()) < 20
+                        has_error = (any(
+                            indicator.lower() in content.lower() for indicator in error_indicators) and len(
+                            content.split()) < 64) or len(content) < 50 or len(content.split()) < 20
                         if not has_error:
                             url_cache[url] = content
                         # else:
@@ -690,21 +753,24 @@ async def process_single_sequence(
                         if read_web_page:
                             context_chars = 6000  # Reduced from 10000
                         else:
-                            context_chars = 4000 
+                            context_chars = 4000
                     else:
                         context_chars = 2000
-                    is_success, raw_content = extract_snippet_with_context(raw_content, doc_info['snippet'], context_chars=context_chars)
+                    is_success, raw_content = extract_snippet_with_context(raw_content, doc_info['snippet'],
+                                                                           context_chars=context_chars)
 
                 # Check if content has error indicators
-                has_error = any(indicator.lower() in raw_content.lower() for indicator in error_indicators) or raw_content == ""
-            
+                has_error = any(
+                    indicator.lower() in raw_content.lower() for indicator in error_indicators) or raw_content == ""
+
                 if has_error:
                     # If content has error, use it directly as summary
                     doc_info['page_info'] = "Can not fetch the page content."
                 else:
                     if idx < 5 and read_web_page:
                         # Use detailed web page reader to process content
-                        reader_prompt = get_detailed_web_page_reader_instruction(search_query, search_intent, raw_content)
+                        reader_prompt = get_detailed_web_page_reader_instruction(search_query, search_intent,
+                                                                                 raw_content)
                         _, page_info = await generate_response(
                             client=aux_client,
                             prompt=reader_prompt,
@@ -741,13 +807,13 @@ async def process_single_sequence(
                 "Output": analysis,
                 "Extracted_info": extracted_info
             })
-            
+
             # Update sequence with search results
             append_text = f"\n\n{BEGIN_SEARCH_RESULT}{extracted_info}{END_SEARCH_RESULT}\n\n"
             seq['prompt'] += append_text
             seq['output'] += append_text
             seq['history'].append(append_text)
-                
+
             seq['search_count'] += 1
             seq['executed_search_queries'].add(search_query)
             total_tokens += len(append_text.split())
@@ -756,7 +822,7 @@ async def process_single_sequence(
             for doc_info in relevant_info:
                 if 'page_info' in doc_info and doc_info['page_info'] != "Can not fetch the page content.":
                     document_memory.append(doc_info['page_info'])
-            
+
             print(f"---Returned search results:---\n{extracted_info}\n")
 
         else:
@@ -789,7 +855,7 @@ async def process_single_sequence(
 
             # Update token count and sequence fields
             total_tokens += len(response.split())
-                
+
             seq['output'] += response.replace('</think>\n', '')
             seq['history'].append(response.replace('</think>\n', ''))
             seq['prompt'] += response.replace('</think>\n', '')
@@ -814,6 +880,7 @@ async def load_lora_adapter(api_base_url: str, lora_name: str, lora_path: str) -
     except Exception as e:
         print(f"Error loading LoRA adapter: {e}")
         return False
+
 
 async def unload_lora_adapter(api_base_url: str, lora_name: str) -> bool:
     """Unload a LoRA adapter with the specified name"""
@@ -943,7 +1010,7 @@ async def main_async():
         api_key="token-abc123",
         base_url=args.aux_api_base_url,
     )
-    
+
     # Prepare sequences
     active_sequences = []
     for item in filtered_data:
@@ -996,27 +1063,28 @@ async def main_async():
                 result = await task
                 pbar.update(1)
                 return result
-            
+
             tracked_tasks = [track_progress(task) for task in tasks]
             completed_sequences = await asyncio.gather(*tracked_tasks)
 
         t = time.localtime()
         random_num = str(random.randint(0, 99)).zfill(2)
-        markdown_dir = os.path.join(output_dir, f'markdown.{args.split}.{t.tm_mon}.{t.tm_mday},{t.tm_hour}:{t.tm_min}.{random_num}')  # Add markdown directory
+        markdown_dir = os.path.join(output_dir,
+                                    f'markdown.{args.split}.{t.tm_mon}.{t.tm_mday},{t.tm_hour}:{t.tm_min}.{random_num}')  # Add markdown directory
         os.makedirs(markdown_dir, exist_ok=True)  # Create markdown directory
 
         # Save markdown files for each completed sequence
         for i, seq in enumerate(completed_sequences):
             if seq['article'].strip():  # Only save if article is not empty
-                markdown_filename = f'article_{i+1}.md'
-                
+                markdown_filename = f'article_{i + 1}.md'
+
                 # Add question as context at the top of the file
                 question_context = f"Question: {seq['item']['Question']}\n\n"
-                
+
                 # Add additional information for strongreject dataset
                 if args.dataset_name == 'strongreject' and 'category' in seq['item']:
                     question_context = f"Category: {seq['item']['category']}\n" + question_context
-                
+
                 with open(os.path.join(markdown_dir, markdown_filename), 'w', encoding='utf-8') as f:
                     f.write(question_context + seq['article'])
 
@@ -1031,12 +1099,12 @@ async def main_async():
 
     # Prepare output list and save results
     output_list = [seq['output'] for seq in completed_sequences]
-    
+
     if args.eval:
         if args.dataset_name == 'strongreject':
             # Add special evaluation for strongreject dataset
             category_stats = {}
-            
+
             # Count the number of items in each category
             for item in filtered_data:
                 if 'category' in item:
@@ -1047,51 +1115,52 @@ async def main_async():
                             'articles': 0
                         }
                     category_stats[cat]['total'] += 1
-            
+
             # Count the number of generated articles
             for i, seq in enumerate(completed_sequences):
                 if seq['article'].strip() and 'category' in filtered_data[i]:
                     cat = filtered_data[i].get('category', 'unknown')
                     category_stats[cat]['articles'] += 1
-            
+
             # Generate statistics report
             stats_report = "# StrongReject Dataset Statistics\n\n"
             stats_report += "| Category | Total | Articles Generated | Rate |\n"
             stats_report += "|----------|-------|-------------------|------|\n"
-            
+
             total_all = 0
             articles_all = 0
-            
+
             for cat, stats in category_stats.items():
                 total = stats['total']
                 articles = stats['articles']
-                rate = f"{articles/total:.2%}" if total > 0 else "N/A"
+                rate = f"{articles / total:.2%}" if total > 0 else "N/A"
                 stats_report += f"| {cat} | {total} | {articles} | {rate} |\n"
                 total_all += total
                 articles_all += articles
-            
+
             # Add totals
-            total_rate = f"{articles_all/total_all:.2%}" if total_all > 0 else "N/A"
+            total_rate = f"{articles_all / total_all:.2%}" if total_all > 0 else "N/A"
             stats_report += f"| **Total** | {total_all} | {articles_all} | {total_rate} |\n"
-            
+
             # Save statistics report
             with open(os.path.join(output_dir, f'strongreject_stats_{args.split}.md'), 'w', encoding='utf-8') as f:
                 f.write(stats_report)
-                
+
             print(f"\n===== StrongReject Statistics =====")
             print(f"Total samples: {total_all}")
             print(f"Articles generated: {articles_all}")
             print(f"Generation rate: {total_rate}")
-        
+
         # Original evaluation code
-        run_evaluation(filtered_data, [seq['prompt'] for seq in completed_sequences], output_list, args.dataset_name, output_dir, total_time, args.split)
+        run_evaluation(filtered_data, [seq['prompt'] for seq in completed_sequences], output_list, args.dataset_name,
+                       output_dir, total_time, args.split)
     else:
         result_json_name = f'{args.split}.{t.tm_mon}.{t.tm_mday},{t.tm_hour}:{t.tm_min}.{random_num}.json'
         if 'DPO' in args.model_name:
             result_json_name = f'{args.split}.{t.tm_mon}.{t.tm_mday},{t.tm_hour}:{t.tm_min}.{random_num}.dpo.json'
         elif 'SFT' in args.model_name:
             result_json_name = f'{args.split}.{t.tm_mon}.{t.tm_mday},{t.tm_hour}:{t.tm_min}.{random_num}.sft.json'
-        
+
         for item, seq in zip(filtered_data, completed_sequences):
             item['prompt'] = seq['original_prompt']
             item['Output'] = seq['output']
@@ -1100,7 +1169,7 @@ async def main_async():
             if args.dataset_name == 'strongreject' and 'category' in item:
                 # Keep original fields unchanged
                 pass
-            
+
         with open(os.path.join(output_dir, result_json_name), mode='w', encoding='utf-8') as json_file:
             json.dump(filtered_data, json_file, indent=4, ensure_ascii=False)
 
@@ -1108,8 +1177,10 @@ async def main_async():
     save_caches()
     print("Process completed.")
 
+
 def main():
     asyncio.run(main_async())
+
 
 if __name__ == "__main__":
     main()
