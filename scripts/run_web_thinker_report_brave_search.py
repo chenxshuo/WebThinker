@@ -60,12 +60,9 @@ from pathlib import Path
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / ".env", override=True)
 
-tokenizer = AutoTokenizer.from_pretrained(
-    "/dss/dssfs05/pn39qo/pn39qo-dss-0001/.cache/huggingface/hub/models--Qwen--QwQ-32B/snapshots/976055f8c83f394f35dbd3ab09a285a984907bd0")
-aux_tokenizer = AutoTokenizer.from_pretrained(
-    "/dss/dssfs05/pn39qo/pn39qo-dss-0001/.cache/huggingface/hub/models--Qwen--QwQ-32B/snapshots/976055f8c83f394f35dbd3ab09a285a984907bd0")
-# aux_tokenizer = AutoTokenizer.from_pretrained("/dss/dssfs05/pn39qo/pn39qo-dss-0001/.cache/huggingface/hub/models--Qwen--Qwen2.5-72B-Instruct/snapshots/495f39366efef23836d0cfae4fbe635880d2be31")
-
+# tokenizer和aux_tokenizer将在加载命令行参数后初始化
+tokenizer = None
+aux_tokenizer = None
 
 # Define special tokens
 BEGIN_SEARCH_QUERY = "<|begin_search_query|>"
@@ -136,12 +133,16 @@ def parse_args():
     parser.add_argument('--api_base_url', type=str, required=True, help="Base URL for the API endpoint")
     parser.add_argument('--aux_api_base_url', type=str, required=True,
                         help="Base URL for the auxiliary model API endpoint")
-    parser.add_argument('--model_name', type=str, default="QwQ-32B", help="Name of the model to use")
-    parser.add_argument('--aux_model_name', type=str, default="Qwen2.5-72B-Instruct",
+    parser.add_argument('--model_name', type=str, default="Qwen/Qwen2.5-72B-Instruct", help="Name of the model to use")
+    parser.add_argument('--aux_model_name', type=str, default="Qwen/Qwen2.5-72B-Instruct",
                         help="Name of the auxiliary model to use")
     parser.add_argument('--concurrent_limit', type=int, default=32, help="Maximum number of concurrent API calls")
     parser.add_argument('--lora_name', type=str, default=None, help="Name of the LoRA adapter to load")
     parser.add_argument('--lora_path', type=str, default=None, help="Path to the LoRA weights")
+    parser.add_argument('--tokenizer_name_or_path', type=str, default=None, 
+                       help="Tokenizer name or path for the main model. If not provided, will use model_name")
+    parser.add_argument('--aux_tokenizer_name_or_path', type=str, default=None,
+                       help="Tokenizer name or path for the auxiliary model. If not provided, will use aux_model_name")
     return parser.parse_args()
 
 
@@ -906,6 +907,27 @@ async def main_async():
 
     if args.jina_api_key == 'None':
         jina_api_key = None
+        
+    # 初始化tokenizer，使用命令行参数
+    global tokenizer, aux_tokenizer
+    tokenizer_name_or_path = args.tokenizer_name_or_path if args.tokenizer_name_or_path else args.model_name
+    aux_tokenizer_name_or_path = args.aux_tokenizer_name_or_path if args.aux_tokenizer_name_or_path else args.aux_model_name
+    
+    print(f"Loading main tokenizer: {tokenizer_name_or_path}")
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(tokenizer_name_or_path)
+    except Exception as e:
+        print(f"Error loading main tokenizer: {e}")
+        print("Attempting to load a default tokenizer...")
+        tokenizer = AutoTokenizer.from_pretrained("gpt2")
+        
+    print(f"Loading auxiliary tokenizer: {aux_tokenizer_name_or_path}")
+    try:
+        aux_tokenizer = AutoTokenizer.from_pretrained(aux_tokenizer_name_or_path)
+    except Exception as e:
+        print(f"Error loading auxiliary tokenizer: {e}")
+        print("Using main tokenizer as fallback for auxiliary tokenizer")
+        aux_tokenizer = tokenizer
 
     # Modified data loading section
     if args.single_question:

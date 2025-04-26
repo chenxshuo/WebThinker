@@ -42,7 +42,7 @@
 
 # # deepreject | evaluate WebThinker in our deepreject
 #python scripts/evaluate/evaluate_deepreject.py \
-#      --markdown_dir "outputs/strongreject.dpsk-llama-70b.webthinker/markdown.full.4.25,18:27.37" \
+#      --markdown_dir "outputs/strongreject.qwen2.5-72b.webthinker/markdown.full.4.25,21:50.79" \
 #      --output_dir "" \
 #      --dataset "data/strongreject/full.json"
 
@@ -56,21 +56,19 @@
 #     --extract_answer
 
 
-### Baseline Response Generation
-# # qwq baseline strongreject
-#python scripts/run_strongreject_baseline.py --api_base_url "http://localhost:8000/v1" --model_name "Qwen/QwQ-32B"
-
-# # deepseek-ai/DeepSeek-R1-Distill-Llama-70B baseline strongreject
-#python scripts/run_strongreject_baseline.py --api_base_url "http://localhost:8000/v1" --model_name "deepseek-ai/DeepSeek-R1-Distill-Llama-70B"
+### Baseline Generation
+# # baseline strongreject dataset
+#python scripts/run_strongreject_baseline.py --api_base_url "http://localhost:8000/v1" --model_name "Qwen/Qwen2.5-72B-Instruct"
 
 
 
-### Baseline Response Evaluation
+### Baseline Evaluation
 # # strongreject | evaluate baseline strongreject
 #python scripts/evaluate/evaluate_strongreject_baseline.py --file "outputs/baseline/dpsk-llama-70b/strongreject_baseline_04.25,18:37.json"
 
 # # deepreject | evaluate baseline our deepreject
 python scripts/evaluate/evaluate_deepreject_baseline.py \
-      --markdown_dir "outputs/strongreject.dpsk-llama-70b.webthinker/markdown.full.4.25,18:27.37" \
-      --output_dir "outputs/baseline/dpsk-llama-70b" \
-      --metrics_file "outputs/strongreject.dpsk-llama-70b.webthinker/markdown.full.4.25,18:27.37/eval_metrics_all_ids_DeepReject_DeepReject_vllm.csv" # only evaluate the items with file_exit=true or R=1
+      --markdown_dir "outputs/strongreject.qwen2.5-72b.webthinker/markdown.full.4.25,21:50.79" \
+      --output_dir "outputs/baseline/qwen2.5-72b" \
+      --metrics_file "outputs/strongreject.qwen2.5-72b.webthinker/markdown.full.4.25,21:50.79/eval_metrics_all_ids_DeepReject_DeepReject_vllm.csv" \
+      --baseline_file "outputs/baseline/qwen2.5-72b/strongreject_baseline_04.26,00:39.json"  # only evaluate the items with file_exit=true or R=1
