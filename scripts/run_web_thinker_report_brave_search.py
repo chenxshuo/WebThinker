@@ -60,7 +60,7 @@ from pathlib import Path
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / ".env", override=True)
 
-# tokenizer和aux_tokenizer将在加载命令行参数后初始化
+# tokenizer and aux_tokenizer will be initialized after loading command line arguments
 tokenizer = None
 aux_tokenizer = None
 
@@ -165,24 +165,24 @@ def format_search_results(relevant_info: List[Dict]) -> str:
     """Format search results into a readable string"""
     formatted_documents = ""
     try:
-        # 检查relevant_info是否为列表
+        # Check if relevant_info is a list
         if not isinstance(relevant_info, list):
             print(f"Error: expected list but got {type(relevant_info)}")
             return f"Error formatting search results: unexpected type {type(relevant_info)}"
             
         for i, doc_info in enumerate(relevant_info):
-            # 检查doc_info是否为字典
+            # Check if doc_info is a dictionary
             if not isinstance(doc_info, dict):
                 print(f"Warning: Expected dict for doc_info but got {type(doc_info)}: {doc_info}")
                 continue
                 
-            # 安全地处理title字段
+            # Safely process the title field
             if 'title' in doc_info and isinstance(doc_info['title'], str):
                 doc_info['title'] = doc_info['title'].replace('<b>','').replace('</b>','')
             elif 'title' in doc_info:
                 print(f"Warning: title is not a string: {type(doc_info['title'])}")
                 
-            # 安全地处理snippet字段
+            # Safely process the snippet field
             if 'snippet' in doc_info and isinstance(doc_info['snippet'], str):
                 doc_info['snippet'] = doc_info['snippet'].replace('<b>','').replace('</b>','')
             elif 'snippet' in doc_info:
@@ -351,15 +351,15 @@ async def generate_deep_web_explorer(
                 else:
                     try:
                         results = await brave_search_async(new_query, args.brave_api_key, country='us', language='en', timeout=20)
-                        # 检查结果是否有效
+                        # Check if results are valid
                         if results and isinstance(results, dict):
                             search_cache[new_query] = results
                         else:
                             print(f"Warning: Invalid results from Brave search API: {type(results)}")
-                            results = {"web": {"results": []}}  # 提供一个空结果结构
+                            results = {"web": {"results": []}}  # Provide an empty result structure
                     except Exception as e:
                         print(f"Error during search query '{new_query}': {e}")
-                        results = {"web": {"results": []}}  # 错误时提供空结果
+                        results = {"web": {"results": []}}  # Provide empty results on error
                 print('- Searched for:', new_query)
 
                 try:
@@ -695,25 +695,25 @@ async def process_single_sequence(
             else:
                 try:
                     results = await brave_search_async(search_query, api_key=os.getenv('BRAVE_API_KEY'), country='us', language='en', timeout=20)
-                    # 检查结果是否有效
+                    # Check if results are valid
                     if results and isinstance(results, dict):
                         search_cache[search_query] = results
                     else:
                         print(f"Warning: Invalid results from Brave search API: {type(results)}")
-                        results = {"web": {"results": []}}  # 提供一个空结果结构
+                        results = {"web": {"results": []}}  # Provide an empty result structure
                 except Exception as e:
                     print(f"Error during search query '{search_query}': {e}")
-                    results = {"web": {"results": []}}  # 错误时提供空结果
+                    results = {"web": {"results": []}}  # Provide empty results on error
             print(f'---Searched for:---\n{search_query}\n')
 
             try:
                 relevant_info = BraveSearchClient.extract_search_results(results)
                 if not isinstance(relevant_info, list):
                     print(f"Warning: extract_search_results returned non-list: {type(relevant_info)}")
-                    relevant_info = []  # 确保是列表类型
+                    relevant_info = []  # Ensure it's a list type
             except Exception as e:
                 print(f"Error extracting search results: {e}")
-                relevant_info = []  # 出错时提供空列表
+                relevant_info = []  # Provide empty list on error
 
             # Process documents
             urls_to_fetch = []
@@ -908,7 +908,7 @@ async def main_async():
     if args.jina_api_key == 'None':
         jina_api_key = None
         
-    # 初始化tokenizer，使用命令行参数
+    # Initialize tokenizer using command line parameters
     global tokenizer, aux_tokenizer
     tokenizer_name_or_path = args.tokenizer_name_or_path if args.tokenizer_name_or_path else args.model_name
     aux_tokenizer_name_or_path = args.aux_tokenizer_name_or_path if args.aux_tokenizer_name_or_path else args.aux_model_name
