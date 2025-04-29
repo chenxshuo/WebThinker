@@ -27,11 +27,11 @@
 #python scripts/run_web_thinker_report_brave_search.py \
 #    --dataset_name strongreject \
 #    --split full \
-#    --concurrent_limit 32 \
+#    --concurrent_limit 24 \
 #    --api_base_url "http://localhost:8000/v1" \
-#    --model_name "Qwen/Qwen2.5-7B-Instruct" \
+#    --model_name "Qwen/Qwen3-32B" \
 #    --aux_api_base_url "http://localhost:8000/v1" \
-#    --aux_model_name "Qwen/Qwen2.5-7B-Instruct" # Qwen/QwQ-32B, deepseek-ai/DeepSeek-R1-Distill-Qwen-32B, mistralai/Mistral-7B-Instruct-v0.2, deepseek-ai/DeepSeek-R1-Distill-Llama-70B, Qwen/Qwen2.5-72B-Instruct, GAIR/DeepResearcher-7b, Qwen/Qwen2.5-7B-Instruct
+#    --aux_model_name "Qwen/Qwen3-32B" # Qwen/QwQ-32B, deepseek-ai/DeepSeek-R1-Distill-Qwen-32B, mistralai/Mistral-7B-Instruct-v0.2, deepseek-ai/DeepSeek-R1-Distill-Llama-70B, Qwen/Qwen2.5-72B-Instruct, GAIR/DeepResearcher-7b, Qwen/Qwen2.5-7B-Instruct, Qwen/Qwen3-32B
 
 
 ### Evaluation WebThinker
@@ -58,7 +58,7 @@
 
 ### Baseline Generation
 # # baseline strongreject dataset
-#python scripts/run_strongreject_baseline.py --api_base_url "http://localhost:8000/v1" --model_name "Qwen/Qwen2.5-7B-Instruct"
+#python scripts/run_strongreject_baseline.py --api_base_url "http://localhost:8000/v1" --model_name "Qwen/Qwen3-32B"
 
 
 
@@ -78,17 +78,44 @@
 ### Evaluation refusal words
 # for webthinker -> only give markdown_dir (must keep baseline_file empty "")
 # for baseline -> should give baseline_file and metrics_file (can keep markdown_dir empty "")
+# if want to evaluate in lower ASR model -> add "--lower"
+
 
 # for webthinker
 #python scripts/evaluate/evaluate_refusal_words.py \
-#      --markdown_dir "outputs/strongreject.deepresearcher-7b.webthinker/markdown.full.4.28,14:29.94" \
+#      --markdown_dir "outputs/strongreject.qwq.webthinker/markdown.full.4.20,22:48.60" \
 #      --output_dir "" \
 #      --metrics_file "" \
-#      --baseline_file ""
+#      --baseline_file "" \
+#      --lower
+
 
 # for baseline
- python scripts/evaluate/evaluate_refusal_words.py \
-       --markdown_dir "" \
-       --output_dir "" \
-       --metrics_file "outputs/strongreject.deepresearcher-7b.webthinker/markdown.full.4.28,14:29.94/eval_metrics_all_ids_DeepReject_DeepReject_vllm.csv" \
-       --baseline_file "outputs/baseline/deepresearcher-7b/strongreject_baseline_04.28,15:12.json"
+# python scripts/evaluate/evaluate_refusal_words.py \
+#       --markdown_dir "" \
+#       --output_dir "" \
+#       --metrics_file "outputs/strongreject.qwq.webthinker/markdown.full.4.20,22:48.60/eval_metrics_all_ids_DeepReject_DeepReject_vllm.csv" \
+#       --baseline_file "outputs/baseline/QwQ-32B/full/strongreject_baseline_04.17,13:50.json" \
+#       --lower
+
+
+
+
+### Evaluation LLM Judge
+# for webthinker -> only give markdown_dir (must keep baseline_file empty "")
+# for baseline -> should give baseline_file and metrics_file (can keep markdown_dir empty "")
+
+# for webthinker
+#python scripts/evaluate/evaluate_llm_judge.py \
+#      --markdown_dir "outputs/strongreject.qwq.webthinker/markdown.full.4.20,22:48.60" \
+#      --output_dir "" \
+#      --metrics_file "" \
+#      --baseline_file "" \
+
+
+# for baseline 1
+python scripts/evaluate/evaluate_llm_judge.py \
+     --markdown_dir "" \
+     --output_dir "" \
+     --metrics_file "outputs/strongreject.qwq.webthinker/markdown.full.4.20,22:48.60/eval_metrics_all_ids_DeepReject_DeepReject_vllm.csv" \
+     --baseline_file "outputs/baseline/QwQ-32B/full/strongreject_baseline_04.17,13:50.json" \

@@ -232,7 +232,9 @@ async def generate_response(
         stop: List[str] = [END_SEARCH_QUERY],
         retry_limit: int = 3,
 ) -> Tuple[str, str]:
-    """Generate a single response with retry logic"""
+    """Generate a single response with retry logic and timeout"""
+    TIMEOUT_SECONDS = 480  # 8 minutes
+
     for attempt in range(retry_limit):
         try:
             async with semaphore:
@@ -247,28 +249,55 @@ async def generate_response(
                 else:
                     formatted_prompt = prompt
 
-                response = await client.completions.create(
-                    model=model_name,
-                    prompt=formatted_prompt,
-                    temperature=temperature,
-                    top_p=top_p,
-                    max_tokens=max_tokens,
-                    stop=stop,
-                    extra_body={
-                        'top_k': top_k,
-                        'include_stop_str_in_output': True,
-                        'repetition_penalty': repetition_penalty,
-                    },
-                    timeout=600,
-                )
-                return formatted_prompt, response.choices[0].text
+                print(f"[generate_response] Starting attempt {attempt + 1}...")
+                try:
+                    async def api_call():
+                        return await client.completions.create(
+                            model=model_name,
+                            prompt=formatted_prompt,
+                            temperature=temperature,
+                            top_p=top_p,
+                            max_tokens=max_tokens,
+                            stop=stop,
+                            extra_body={
+                                'top_k': top_k,
+                                'include_stop_str_in_output': True,
+                                'repetition_penalty': repetition_penalty,
+                            },
+                            timeout=300,  # reduced internal timeout
+                        )
+
+                    response = await asyncio.wait_for(
+                        api_call(),
+                        timeout=TIMEOUT_SECONDS
+                    )
+                    
+                    if not response or not response.choices:
+                        print(f"[generate_response] Invalid response")
+                        raise ValueError("Invalid response")
+                        
+                    print(f"[generate_response] Successfully generated response")
+                    return formatted_prompt, response.choices[0].text
+
+                except asyncio.TimeoutError:
+                    print(f"[generate_response] Timeout after {TIMEOUT_SECONDS} seconds")
+                    if attempt < retry_limit - 1:
+                        continue
+                    return formatted_prompt, ""
+                    
+                except Exception as e:
+                    print(f"[generate_response] API call error: {str(e)}")
+                    if attempt < retry_limit - 1:
+                        await asyncio.sleep(2 * (attempt + 1))
+                        continue
+                    return formatted_prompt, ""
+
         except Exception as e:
-            print(f"Generate Response Error occurred: {e}, Starting retry attempt {attempt + 1}")
-            print(prompt)
+            print(f"[generate_response] Outer exception: {str(e)}")
             if attempt == retry_limit - 1:
-                print(f"Failed after {retry_limit} attempts: {e}")
                 return formatted_prompt, ""
-            await asyncio.sleep(1 * (attempt + 1))
+            await asyncio.sleep(2 * (attempt + 1))
+            
     return formatted_prompt, ""
 
 
@@ -499,7 +528,7 @@ async def process_single_sequence(
     seq['prompt'] = user_prompt
 
     # Initialize token counter with prompt tokens
-    MAX_TOKENS = 16000  # Reduced from 50000
+    MAX_TOKENS = 12000  # Reduced from 50000
     total_tokens = len(seq['prompt'].split())
 
     # Initialize web explorer interactions list and article-related variables
@@ -520,7 +549,7 @@ async def process_single_sequence(
         semaphore=semaphore,
         temperature=args.temperature,
         top_p=args.top_p,
-        max_tokens=6000,  # Reduced from args.max_tokens
+        max_tokens=5000,  # Reduced from args.max_tokens
         repetition_penalty=args.repetition_penalty,
         top_k=args.top_k_sampling,
         min_p=args.min_p,
@@ -752,11 +781,11 @@ async def process_single_sequence(
                     raw_content = url_cache[url]
                     if idx < 5:
                         if read_web_page:
-                            context_chars = 6000  # Reduced from 10000
+                            context_chars = 5000  # Reduced from 10000
                         else:
-                            context_chars = 4000
+                            context_chars = 4000  # Reduced from 4000
                     else:
-                        context_chars = 2000
+                        context_chars = 2000  # Reduced from 2000
                     is_success, raw_content = extract_snippet_with_context(raw_content, doc_info['snippet'],
                                                                            context_chars=context_chars)
 
@@ -776,7 +805,7 @@ async def process_single_sequence(
                             client=aux_client,
                             prompt=reader_prompt,
                             semaphore=semaphore,
-                            max_tokens=8000,
+                            max_tokens=6000,  # Reduced from 8000
                             model_name=args.aux_model_name,
                         )
                         doc_info['page_info'] = page_info
