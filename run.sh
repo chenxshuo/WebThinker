@@ -27,7 +27,7 @@
 #python scripts/run_web_thinker_report_brave_search.py \
 #    --dataset_name strongreject \
 #    --split full \
-#    --concurrent_limit 24 \
+#    --concurrent_limit 32 \
 #    --api_base_url "http://localhost:8000/v1" \
 #    --model_name "Qwen/Qwen3-32B" \
 #    --aux_api_base_url "http://localhost:8000/v1" \
@@ -40,9 +40,9 @@
 #    --markdown_dir "outputs/strongreject.qwq.webthinker/markdown.full.4.20,22:48.60" \
 #    --output_dir "" # default: "" = markdown_dir
 
-# # Evaluation deepreject | evaluate WebThinker in our deepreject
+ # Evaluation deepreject | evaluate WebThinker in our deepreject
 #python scripts/evaluate/evaluate_deepreject.py \
-#      --markdown_dir "outputs/strongreject.qwen2.5-7b.webthinker/markdown.full.4.28,16:42.67" \
+#      --markdown_dir "outputs/strongreject.qwen3-32b.webthinker/markdown.full.4.30,9:2.27" \
 #      --output_dir "" \
 #      --dataset "data/strongreject/full.json"
 
@@ -68,10 +68,10 @@
 
 # # deepreject | evaluate baseline our deepreject
 #python scripts/evaluate/evaluate_deepreject_baseline.py \
-#      --markdown_dir "outputs/strongreject.qwen2.5-7b.webthinker/markdown.full.4.28,16:42.67" \
-#      --output_dir "outputs/baseline/qwen2.5-7b" \
-#      --metrics_file "outputs/strongreject.qwen2.5-7b.webthinker/markdown.full.4.28,16:42.67/eval_metrics_all_ids_DeepReject_DeepReject_vllm.csv" \
-#      --baseline_file "outputs/baseline/qwen2.5-7b/strongreject_baseline_04.28,16:52.json"  # only evaluate the items with file_exit=true or R=1
+#      --markdown_dir "outputs/strongreject.qwen3-32b.webthinker/markdown.full.4.30,9:2.27" \
+#      --output_dir "outputs/baseline/qwen3-32b" \
+#      --metrics_file "outputs/strongreject.qwen3-32b.webthinker/markdown.full.4.30,9:2.27/eval_metrics_all_ids_DeepReject_DeepReject_vllm.csv" \
+#      --baseline_file "outputs/baseline/qwen3-32b/strongreject_baseline_04.29,01:12.json"  # only evaluate the items with file_exit=true or R=1
 
 
 
@@ -83,7 +83,7 @@
 
 # for webthinker
 #python scripts/evaluate/evaluate_refusal_words.py \
-#      --markdown_dir "outputs/strongreject.qwq.webthinker/markdown.full.4.20,22:48.60" \
+#      --markdown_dir "outputs/strongreject.qwen3-32b.webthinker/markdown.full.4.30,9:2.27" \
 #      --output_dir "" \
 #      --metrics_file "" \
 #      --baseline_file "" \
@@ -91,12 +91,12 @@
 
 
 # for baseline
-# python scripts/evaluate/evaluate_refusal_words.py \
-#       --markdown_dir "" \
-#       --output_dir "" \
-#       --metrics_file "outputs/strongreject.qwq.webthinker/markdown.full.4.20,22:48.60/eval_metrics_all_ids_DeepReject_DeepReject_vllm.csv" \
-#       --baseline_file "outputs/baseline/QwQ-32B/full/strongreject_baseline_04.17,13:50.json" \
-#       --lower
+#python scripts/evaluate/evaluate_refusal_words.py \
+#     --markdown_dir "" \
+#     --output_dir "" \
+#     --metrics_file "outputs/strongreject.qwen3-32b.webthinker/markdown.full.4.30,9:2.27/eval_metrics_all_ids_DeepReject_DeepReject_vllm.csv" \
+#     --baseline_file "outputs/baseline/qwen3-32b/strongreject_baseline_04.29,01:12.json" \
+#     --lower
 
 
 
@@ -107,15 +107,15 @@
 
 # for webthinker
 #python scripts/evaluate/evaluate_llm_judge.py \
-#      --markdown_dir "outputs/strongreject.qwq.webthinker/markdown.full.4.20,22:48.60" \
+#      --markdown_dir "outputs/strongreject.deepresearcher-7b.webthinker/markdown.full.4.28,16:42.67" \
 #      --output_dir "" \
 #      --metrics_file "" \
-#      --baseline_file "" \
+#      --baseline_file ""
 
 
-# for baseline 1
-python scripts/evaluate/evaluate_llm_judge.py \
-     --markdown_dir "" \
-     --output_dir "" \
-     --metrics_file "outputs/strongreject.qwq.webthinker/markdown.full.4.20,22:48.60/eval_metrics_all_ids_DeepReject_DeepReject_vllm.csv" \
-     --baseline_file "outputs/baseline/QwQ-32B/full/strongreject_baseline_04.17,13:50.json" \
+# for baseline
+#python scripts/evaluate/evaluate_llm_judge.py \
+#     --markdown_dir "" \
+#     --output_dir "" \
+#     --metrics_file "outputs/strongreject.deepresearcher-7b.webthinker/markdown.full.4.28,16:42.67/eval_metrics_all_ids_DeepReject_DeepReject_vllm.csv" \
+#     --baseline_file "outputs/baseline/deepresearcher-7b/strongreject_baseline_04.28,16:52.json"
