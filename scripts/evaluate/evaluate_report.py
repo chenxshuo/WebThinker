@@ -164,7 +164,6 @@ system_scores = {
     "grok3": {"Comprehensiveness": [], "Thoroughness": [], "Factuality": [], "Coherence": []}
 }
 
-# 添加一个新的字典来存储每个问题的具体评分
 detailed_scores = []
 
 # Read test questions
@@ -205,7 +204,6 @@ for i in tqdm(range(30)):
     # Extract scores
     scores = extract_scores(response.choices[0].message.content)
     if scores:
-        # 保存当前问题的详细评分
         question_detail = {
             "question_id": article_num,
             "question": questions[i],
@@ -220,7 +218,6 @@ for i in tqdm(range(30)):
             system_scores[original_system]["Factuality"].append(scores_dict["Factuality"])
             system_scores[original_system]["Coherence"].append(scores_dict["Coherence"])
             
-            # 为当前问题添加系统评分
             question_detail["scores"][original_system] = {
                 "Overall Comprehensiveness": scores_dict["Overall Comprehensiveness"],
                 "Thoroughness of Discussion": scores_dict["Thoroughness of Discussion"],
@@ -245,7 +242,6 @@ output_path = os.path.join(webthinker_dir, f"evaluation_scores.{timestamp}.json"
 with open(output_path, 'w') as f:
     json.dump(final_scores, f, indent=4)
 
-# 保存详细结果
 detailed_output_path = os.path.join(webthinker_dir, f"evaluation_scores_detailed.{timestamp}.json")
 with open(detailed_output_path, 'w') as f:
     json.dump(detailed_scores, f, indent=4)

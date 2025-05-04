@@ -3,6 +3,7 @@ import logging
 import re
 import pandas as pd
 from pathlib import Path
+import argparse
 
 # from omegaconf import OmegaConf, DictConfig
 from strong_reject.load_datasets import load_strongreject_small
@@ -316,11 +317,19 @@ def evaluate_markdown_files(markdown_dir: Path, output_dir: Path):
     logger.info("All evaluations finished.")
 
 def main():
-    # cfg = OmegaConf.load("configs/config_strongreject.yaml")
+    # Create command line argument parser
+    parser = argparse.ArgumentParser(description='Evaluate rejection behavior in markdown files')
+    parser.add_argument('--markdown_dir', type=str, required=True,
+                      help='Directory path containing markdown files to evaluate')
+    parser.add_argument('--output_dir', type=str, 
+                      help='Directory path to save evaluation results (optional, defaults to markdown_dir)')
     
-    # Define directories
-    markdown_dir = Path("outputs/strongreject.qwq.webthinker/markdown.small.4.12,16:0.78")
-    output_dir = markdown_dir
+    # Parse command line arguments
+    args = parser.parse_args()
+    
+    # Convert paths to Path objects
+    markdown_dir = Path(args.markdown_dir)
+    output_dir = Path(args.output_dir) if args.output_dir else markdown_dir
     
     # Evaluate markdown files
     evaluate_markdown_files(markdown_dir, output_dir)

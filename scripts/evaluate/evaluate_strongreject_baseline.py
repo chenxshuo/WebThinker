@@ -3,6 +3,20 @@ import logging
 import re
 import pandas as pd
 from pathlib import Path
+import argparse  # 添加argparse用于解析命令行参数
+
+"""
+Strong Reject Baseline Evaluator
+
+This script evaluates model responses to potentially harmful prompts, rating their refusal behavior.
+
+Usage:
+    python evaluate_strongreject_baseline.py "filepath"
+    python evaluate_strongreject_baseline.py --file "filepath"
+
+Example:
+    python evaluate_strongreject_baseline.py "outputs/baseline/dpsk-llama-70b/strongreject_baseline_04.25,18:37.json"
+"""
 
 # from omegaconf import OmegaConf, DictConfig
 from strong_reject.load_datasets import load_strongreject_small
@@ -213,6 +227,8 @@ def evaluate_markdown_files(markdown_dir: Path, output_dir: Path):
     
     # Process each file
     results = []
+    detailed_scores = []  # Store detailed scores for each data item
+    
     for file_path in markdown_files:
         file_name = file_path.name
         logger.info(f"Processing {file_name}...")
@@ -263,13 +279,31 @@ def evaluate_markdown_files(markdown_dir: Path, output_dir: Path):
                 response=row["response"],
             )
             
-            # Store results
+            # Store results in DataFrame
             for k, v in result.items():
                 df.at[idx, k] = v
+            
+            # Store detailed scores for JSON output
+            detailed_scores.append({
+                "id": row["file_name"],
+                "scores": {
+                    "refusal": result["refusal"],
+                    "convincingness": result["convincingness"],
+                    "specificity": result["specificity"],
+                    "score": result["score"]
+                },
+                "judge_response": result["judge_response"],
+                "was_summarized": result["was_summarized"]
+            })
         
-        # Save detailed results
+        # Save detailed results to CSV
         detail_path = output_dir / f"eval_details_{evaluator_name}.csv"
         df.to_csv(detail_path, index=False)
+        
+        # Save detailed scores to JSON
+        detailed_scores_path = output_dir / f"detailed_scores_{evaluator_name}.json"
+        with open(detailed_scores_path, "w", encoding="utf-8") as f:
+            json.dump(detailed_scores, f, ensure_ascii=False, indent=2)
         
         # Generate summary stats
         summary_df = pd.DataFrame({
@@ -329,9 +363,28 @@ def evaluate_markdown_files(markdown_dir: Path, output_dir: Path):
     logger.info("All evaluations finished.")
 
 def main():
+    # 添加命令行参数解析
+    parser = argparse.ArgumentParser(description='Evaluate strong rejection baselines.')
+    parser.add_argument('--file', '-f', type=str, help='Path to the baseline JSON file to evaluate (use quotes)', required=False)
+    parser.add_argument('filepath', type=str, nargs='?', help='Path to the baseline JSON file to evaluate (use quotes)')
+    args = parser.parse_args()
+    
     # Define directories
-    baseline_file = Path("outputs/baseline/strongreject_baseline_04.14,19:18.json")
+    if args.filepath:
+        baseline_file = Path(args.filepath)
+    elif args.file:
+        baseline_file = Path(args.file)
+    else:
+        baseline_file = Path("outputs/baseline/strongreject_baseline_04.17,13:50.json")
+    
+    # 打印使用信息
+    if not args.filepath and not args.file:
+        logger.info('No file specified, using default path. For custom path use:')
+        logger.info('python evaluate_strongreject_baseline.py "your/file/path.json"')
+    
     output_dir = baseline_file.parent
+    
+    logger.info(f"Evaluating baseline file: {baseline_file}")
     
     # Read baseline results
     with open(baseline_file, 'r', encoding='utf-8') as f:
@@ -339,6 +392,8 @@ def main():
     
     # Convert to DataFrame
     df = pd.DataFrame(results)
+    
+    detailed_scores = []  # Store detailed scores for each data item
     
     # For each evaluator, evaluate all responses
     for evaluator_name in CONFIG["dataset"]["evaluator"]:
@@ -364,10 +419,30 @@ def main():
             # Store results
             for k, v in result.items():
                 df.at[idx, k] = v
+            
+            # Store detailed scores for JSON output
+            item_id = row.get("id", idx)  # 使用ID如果存在，否则使用索引
+            detailed_scores.append({
+                "id": item_id,
+                "category": row.get("category", "unknown"),
+                "scores": {
+                    "refusal": result["refusal"],
+                    "convincingness": result["convincingness"],
+                    "specificity": result["specificity"],
+                    "score": result["score"]
+                },
+                "judge_response": result["judge_response"],
+                "was_summarized": result["was_summarized"]
+            })
         
-        # Save detailed results
+        # Save detailed results to CSV
         detail_path = output_dir / f"eval_details_{evaluator_name}.csv"
         df.to_csv(detail_path, index=False)
+        
+        # Save detailed scores to JSON
+        detailed_scores_path = output_dir / f"detailed_scores_{evaluator_name}.json"
+        with open(detailed_scores_path, "w", encoding="utf-8") as f:
+            json.dump(detailed_scores, f, ensure_ascii=False, indent=2)
         
         # Generate summary stats
         summary_df = pd.DataFrame({
