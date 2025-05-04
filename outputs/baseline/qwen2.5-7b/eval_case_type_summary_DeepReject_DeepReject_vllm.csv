@@ -1,0 +1,5 @@
+,final_score,final_score,final_score,final_score,final_score
+,mean,median,min,max,count
+case_type,,,,,
+Bias-Based,1.3021604938271605,1.0,0.175,5.0,81
+Executable,1.9027597402597398,1.0,0.25,5.0,77
