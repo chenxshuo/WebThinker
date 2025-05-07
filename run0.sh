@@ -69,37 +69,132 @@
 
 
 # 5.7 Evaluation: LLM Judge
-python scripts/evaluate/evaluate_llm_judge.py \
+#python scripts/evaluate/evaluate_llm_judge.py \
+#      --markdown_dir "outputs/strongreject.qwq.webthinker/markdown.question" \
+#      --output_dir "" \
+#      --metrics_file "" \
+#      --baseline_file ""
+#
+#python scripts/evaluate/evaluate_llm_judge.py \
+#      --markdown_dir "outputs/strongreject.qwen3-32b.webthinker/markdown.question" \
+#      --output_dir "" \
+#      --metrics_file "" \
+#      --baseline_file ""
+#
+#python scripts/evaluate/evaluate_llm_judge.py \
+#      --markdown_dir "outputs/strongreject.dpsk-llama-70b.webthinker/markdown.question.5.5,22:39.65" \
+#      --output_dir "" \
+#      --metrics_file "" \
+#      --baseline_file ""
+#
+#python scripts/evaluate/evaluate_llm_judge.py \
+#      --markdown_dir "outputs/strongreject.qwen2.5-72b.webthinker/markdown.question.5.6,2:13.51" \
+#      --output_dir "" \
+#      --metrics_file "" \
+#      --baseline_file ""
+#
+#python scripts/evaluate/evaluate_llm_judge.py \
+#      --markdown_dir "outputs/strongreject.qwen2.5-7b.webthinker/markdown.question.5.5,23:1.47" \
+#      --output_dir "" \
+#      --metrics_file "" \
+#      --baseline_file ""
+#
+#python scripts/evaluate/evaluate_llm_judge.py \
+#      --markdown_dir "outputs/strongreject.deepresearcher-7b.webthinker/markdown.question.5.6,0:27.07" \
+#      --output_dir "" \
+#      --metrics_file "" \
+#      --baseline_file ""
+
+
+
+
+### Evaluation refusal words
+
+# 1
+# for webthinker
+python scripts/evaluate/evaluate_refusal_words.py \
+      --markdown_dir "outputs/strongreject.qwq.webthinker/markdown.question" \
+      --output_dir "" \
+      --metrics_file "" \
+      --baseline_file "" \
+      --lower
+
+python scripts/evaluate/evaluate_refusal_words.py \
       --markdown_dir "outputs/strongreject.qwq.webthinker/markdown.question" \
       --output_dir "" \
       --metrics_file "" \
       --baseline_file ""
 
-python scripts/evaluate/evaluate_llm_judge.py \
+# 2
+# for webthinker
+python scripts/evaluate/evaluate_refusal_words.py \
+      --markdown_dir "outputs/strongreject.qwen3-32b.webthinker/markdown.question" \
+      --output_dir "" \
+      --metrics_file "" \
+      --baseline_file "" \
+      --lower
+
+python scripts/evaluate/evaluate_refusal_words.py \
       --markdown_dir "outputs/strongreject.qwen3-32b.webthinker/markdown.question" \
       --output_dir "" \
       --metrics_file "" \
       --baseline_file ""
 
-python scripts/evaluate/evaluate_llm_judge.py \
+# 3
+# for webthinker
+python scripts/evaluate/evaluate_refusal_words.py \
+      --markdown_dir "outputs/strongreject.dpsk-llama-70b.webthinker/markdown.question.5.5,22:39.65" \
+      --output_dir "" \
+      --metrics_file "" \
+      --baseline_file "" \
+      --lower
+
+python scripts/evaluate/evaluate_refusal_words.py \
       --markdown_dir "outputs/strongreject.dpsk-llama-70b.webthinker/markdown.question.5.5,22:39.65" \
       --output_dir "" \
       --metrics_file "" \
       --baseline_file ""
 
-python scripts/evaluate/evaluate_llm_judge.py \
+# 4
+# for webthinker
+python scripts/evaluate/evaluate_refusal_words.py \
+      --markdown_dir "outputs/strongreject.qwen2.5-72b.webthinker/markdown.question.5.6,2:13.51" \
+      --output_dir "" \
+      --metrics_file "" \
+      --baseline_file "" \
+      --lower
+
+python scripts/evaluate/evaluate_refusal_words.py \
       --markdown_dir "outputs/strongreject.qwen2.5-72b.webthinker/markdown.question.5.6,2:13.51" \
       --output_dir "" \
       --metrics_file "" \
       --baseline_file ""
 
-python scripts/evaluate/evaluate_llm_judge.py \
+# 5
+# for webthinker
+python scripts/evaluate/evaluate_refusal_words.py \
+      --markdown_dir "outputs/strongreject.qwen2.5-7b.webthinker/markdown.question.5.5,23:1.47" \
+      --output_dir "" \
+      --metrics_file "" \
+      --baseline_file "" \
+      --lower
+
+python scripts/evaluate/evaluate_refusal_words.py \
       --markdown_dir "outputs/strongreject.qwen2.5-7b.webthinker/markdown.question.5.5,23:1.47" \
       --output_dir "" \
       --metrics_file "" \
       --baseline_file ""
 
-python scripts/evaluate/evaluate_llm_judge.py \
+# 6
+# for webthinker
+python scripts/evaluate/evaluate_refusal_words.py \
+      --markdown_dir "outputs/strongreject.deepresearcher-7b.webthinker/markdown.question.5.6,0:27.07" \
+      --output_dir "" \
+      --metrics_file "" \
+      --baseline_file "" \
+      --lower
+
+python scripts/evaluate/evaluate_refusal_words.py \
       --markdown_dir "outputs/strongreject.deepresearcher-7b.webthinker/markdown.question.5.6,0:27.07" \
       --output_dir "" \
       --metrics_file "" \
