@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="f672f803-9c66-450b-8c3d-1f27697eb6f1" name="变更" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/outputs/strongreject.dpsk-llama-70b.webthinker/markdown.question.5.5,22:39.65/eval_case_type_summary_DeepReject_DeepReject_vllm.csv" beforeDir="false" afterPath="$PROJECT_DIR$/outputs/strongreject.dpsk-llama-70b.webthinker/markdown.question.5.5,22:39.65/eval_case_type_summary_DeepReject_DeepReject_vllm.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/outputs/strongreject.dpsk-llama-70b.webthinker/markdown.question.5.5,22:39.65/eval_details_DeepReject_DeepReject_vllm.csv" beforeDir="false" afterPath="$PROJECT_DIR$/outputs/strongreject.dpsk-llama-70b.webthinker/markdown.question.5.5,22:39.65/eval_details_DeepReject_DeepReject_vllm.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/outputs/strongreject.dpsk-llama-70b.webthinker/markdown.question.5.5,22:39.65/eval_metrics_all_ids_DeepReject_DeepReject_vllm.csv" beforeDir="false" afterPath="$PROJECT_DIR$/outputs/strongreject.dpsk-llama-70b.webthinker/markdown.question.5.5,22:39.65/eval_metrics_all_ids_DeepReject_DeepReject_vllm.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/outputs/strongreject.dpsk-llama-70b.webthinker/markdown.question.5.5,22:39.65/eval_summary_DeepReject_DeepReject_vllm.csv" beforeDir="false" afterPath="$PROJECT_DIR$/outputs/strongreject.dpsk-llama-70b.webthinker/markdown.question.5.5,22:39.65/eval_summary_DeepReject_DeepReject_vllm.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run0.sh" beforeDir="false" afterPath="$PROJECT_DIR$/run0.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/evaluate/evaluate_deepreject.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/evaluate/evaluate_deepreject.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2vbN0ugpKoWlfNWokZmoa2OwWV6" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/outputs/strongreject.qwen3-32b.webthinker/markdown.test" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.deploy.options" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/outputs/strongreject.qwen3-32b.webthinker/markdown.test" />
+      <recent name="$PROJECT_DIR$/outputs/strongreject.qwen3-32b.webthinker/markdown.test_6.2025.05.04,23:31" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/outputs/strongreject.qwen2.5-72b.webthinker/markdown.test" />
+      <recent name="$PROJECT_DIR$/data/strongreject" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/outputs/strongreject.deepresearcher-7b.webthinker/markdown.full.4.28,16:42.67" />
+      <recent name="$PROJECT_DIR$/outputs/baseline/qwen3-32b" />
+      <recent name="$PROJECT_DIR$/outputs/baseline/qwen2.5-7b" />
+      <recent name="$PROJECT_DIR$/outputs/baseline/deepresearcher-7b" />
+      <recent name="$PROJECT_DIR$/outputs/baseline/qwen2.5-72b" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="f672f803-9c66-450b-8c3d-1f27697eb6f1" name="变更" comment="" />
+      <created>1744409593502</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1744409593502</updated>
+      <workItem from="1744409597401" duration="17954000" />
+      <workItem from="1744636247748" duration="6898000" />
+      <workItem from="1744717801681" duration="4229000" />
+      <workItem from="1744823432394" duration="793000" />
+      <workItem from="1744824462734" duration="83000" />
+      <workItem from="1744824565200" duration="231198000" />
+      <workItem from="1746487524843" duration="6143000" />
+      <workItem from="1746567687514" duration="1362000" />
+      <workItem from="1746569157219" duration="12677000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+</project>
