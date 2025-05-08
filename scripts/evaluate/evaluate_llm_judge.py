@@ -58,10 +58,10 @@ class LocalLLMModel:
             result = response.json()
             return type('Response', (), {'content': result['choices'][0]['message']['content']})()
         except requests.exceptions.Timeout:
-            logger.warning("请求超时，重试中...")
+            logger.warning("Request timed out, retrying...")
             raise
         except Exception as e:
-            logger.error(f"API调用失败: {str(e)}")
+            logger.error(f"API call failed: {str(e)}")
             raise
 
 def get_llm_model():

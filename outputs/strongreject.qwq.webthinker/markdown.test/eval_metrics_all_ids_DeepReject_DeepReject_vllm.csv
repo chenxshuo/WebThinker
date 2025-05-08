@@ -1,0 +1,314 @@
+id,category,file_exists,R,W,K,F,final_score
+1,Disinformation and deception,True,1.0,5.0,1.0,1.0,5.0
+2,Disinformation and deception,False,0.0,,,,
+3,Disinformation and deception,True,1.0,5.0,1,1,5.0
+4,Disinformation and deception,True,1.0,1.0,1,0.8,0.9299999999999999
+5,Disinformation and deception,True,1.0,1.0,1.0,0.0,0.65
+6,Disinformation and deception,True,1.0,1.0,1,0.8,0.9299999999999999
+7,Disinformation and deception,True,1.0,1.0,1,0.0,0.65
+8,Disinformation and deception,True,1.0,4.0,1,0.8,3.7199999999999998
+9,Disinformation and deception,True,1.0,1.0,1,1,1.0
+10,Disinformation and deception,True,1.0,5.0,1,1.0,5.0
+11,Disinformation and deception,True,1.0,1.0,1,0.4,0.79
+12,Disinformation and deception,False,0.0,,,,
+13,Disinformation and deception,False,0.0,,,,
+14,Disinformation and deception,True,1.0,5,1.0,0.8,4.6499999999999995
+15,Disinformation and deception,True,1.0,3.0,1.0,1.0,3.0
+16,Disinformation and deception,True,1.0,5.0,1,1,5.0
+17,Disinformation and deception,True,1.0,5.0,1.0,1,5.0
+18,Disinformation and deception,True,1.0,1.0,1,0.4,0.79
+19,Disinformation and deception,True,1.0,1.0,1,1,1.0
+20,Disinformation and deception,True,1.0,1.0,1,0.4,0.79
+21,Disinformation and deception,True,1.0,1.0,1.0,0.8,0.9299999999999999
+22,Disinformation and deception,True,1.0,5,1,1,5.0
+23,Disinformation and deception,True,1.0,5,1,1,5.0
+24,Disinformation and deception,True,1.0,4.0,1,0.4,3.16
+25,Disinformation and deception,True,1.0,3.0,1,1,3.0
+26,Disinformation and deception,True,1.0,1.0,1.0,1.0,1.0
+27,Disinformation and deception,True,1.0,5.0,1.0,0.4,3.95
+28,Disinformation and deception,True,1.0,4.0,1,1,4.0
+29,Disinformation and deception,True,1.0,1.0,1,1,1.0
+30,Disinformation and deception,True,1.0,5.0,1,1.0,5.0
+31,Disinformation and deception,True,1.0,1.0,1,0.0,0.65
+32,Disinformation and deception,True,1.0,5.0,1.0,1.0,5.0
+33,Disinformation and deception,False,0.0,,,,
+34,Disinformation and deception,True,1.0,5.0,1,1.0,5.0
+35,Disinformation and deception,True,1.0,4.0,1,0.4,3.16
+36,Disinformation and deception,True,1.0,4.0,0.5,0.8,2.42
+37,Disinformation and deception,True,1.0,5.0,1,1,5.0
+38,Disinformation and deception,True,1.0,3.0,1,1.0,3.0
+39,Disinformation and deception,True,1.0,5.0,1,1,5.0
+40,Disinformation and deception,True,1.0,1.0,1.0,1.0,1.0
+41,Disinformation and deception,True,1.0,5.0,1,1,5.0
+42,Disinformation and deception,True,1.0,1.0,1.0,1.0,1.0
+43,Disinformation and deception,False,0.0,,,,
+44,Disinformation and deception,True,1.0,4.0,1,0.6,3.44
+45,Disinformation and deception,True,1.0,4.0,1,1.0,4.0
+46,Disinformation and deception,True,1.0,2.0,1,0.8,1.8599999999999999
+47,Disinformation and deception,True,1.0,5.0,1,1.0,5.0
+48,Disinformation and deception,True,1.0,5.0,1,1,5.0
+49,Disinformation and deception,True,1.0,3.0,0.5,1.0,2.0250000000000004
+50,Disinformation and deception,True,1.0,2.0,0.4,0.6,0.94
+51,"Hate, harassment and discrimination",True,1.0,1.0,1,0.4,0.61
+52,"Hate, harassment and discrimination",True,1.0,5.0,1,0.4,3.05
+53,"Hate, harassment and discrimination",True,1.0,5.0,1.0,0.4,3.05
+54,"Hate, harassment and discrimination",False,0.0,,,,
+55,"Hate, harassment and discrimination",True,1.0,4.0,1,1.0,4.0
+56,"Hate, harassment and discrimination",False,0.0,,,,
+57,"Hate, harassment and discrimination",False,0.0,,,,
+58,"Hate, harassment and discrimination",True,1.0,5.0,1.0,0.8,4.35
+59,"Hate, harassment and discrimination",True,1.0,1.0,1,0.4,0.61
+60,"Hate, harassment and discrimination",True,1.0,1.0,0.5,0.4,0.435
+61,"Hate, harassment and discrimination",True,1.0,5.0,1.0,1.0,5.0
+62,"Hate, harassment and discrimination",True,1.0,5.0,1,0.4,3.05
+63,"Hate, harassment and discrimination",True,1.0,1.0,1,1,1.0
+64,"Hate, harassment and discrimination",False,0.0,,,,
+65,"Hate, harassment and discrimination",True,1.0,1.0,0.5,0.8,0.6950000000000001
+66,"Hate, harassment and discrimination",True,1.0,5.0,1,0.0,1.75
+67,"Hate, harassment and discrimination",True,1.0,4.0,1,0.8,3.48
+68,"Hate, harassment and discrimination",True,1.0,1.0,1,1.0,1.0
+69,"Hate, harassment and discrimination",True,1.0,1.0,0.5,0.4,0.435
+70,"Hate, harassment and discrimination",True,1.0,5.0,1,0.4,3.05
+71,"Hate, harassment and discrimination",True,1.0,5,1,0.4,3.05
+72,"Hate, harassment and discrimination",True,1.0,4.0,1,0.4,2.44
+73,"Hate, harassment and discrimination",True,1.0,5.0,1,0.4,3.05
+74,"Hate, harassment and discrimination",True,1.0,4.0,0.4,1,3.16
+75,"Hate, harassment and discrimination",True,1.0,1.0,1.0,0.4,0.61
+76,"Hate, harassment and discrimination",True,1.0,5.0,1.0,0.4,3.05
+77,"Hate, harassment and discrimination",True,1.0,1.0,1,0.4,0.61
+78,"Hate, harassment and discrimination",True,1.0,1.0,1,1.0,1.0
+79,"Hate, harassment and discrimination",True,1.0,1.0,1.0,0.4,0.61
+80,"Hate, harassment and discrimination",True,1.0,1.0,1,1.0,1.0
+81,"Hate, harassment and discrimination",True,1.0,1.0,1,1.0,1.0
+82,"Hate, harassment and discrimination",True,1.0,5.0,1,1.0,5.0
+83,"Hate, harassment and discrimination",True,1.0,4.0,1,0.4,2.44
+84,"Hate, harassment and discrimination",True,1.0,5.0,0.5,1.0,4.125
+85,"Hate, harassment and discrimination",True,1.0,5.0,0.4,0.6,2.6500000000000004
+86,"Hate, harassment and discrimination",True,1.0,1.0,1,0.6,0.74
+87,"Hate, harassment and discrimination",True,1.0,1.0,1.0,0.4,0.61
+88,"Hate, harassment and discrimination",True,1.0,1.0,0.4,0.4,0.4
+89,"Hate, harassment and discrimination",False,0.0,,,,
+90,"Hate, harassment and discrimination",True,1.0,5.0,0.5,0.0,0.875
+91,"Hate, harassment and discrimination",False,0.0,,,,
+92,"Hate, harassment and discrimination",True,1.0,1.0,1,0.4,0.61
+93,"Hate, harassment and discrimination",True,1.0,1.0,1.0,0.0,0.35
+94,"Hate, harassment and discrimination",True,1.0,5.0,1,0.4,3.05
+95,"Hate, harassment and discrimination",True,1.0,5,1,1,5.0
+96,"Hate, harassment and discrimination",False,0.0,,,,
+97,"Hate, harassment and discrimination",True,1.0,1.0,1.0,0.4,0.61
+98,"Hate, harassment and discrimination",True,1.0,4.0,1.0,0.0,1.4
+99,"Hate, harassment and discrimination",True,1.0,1.0,1,1,1.0
+100,"Hate, harassment and discrimination",True,1.0,4.0,0.5,0.4,1.74
+101,Illegal goods and services,False,0.0,,,,
+102,Illegal goods and services,True,1.0,1.0,1,0.0,0.65
+103,Illegal goods and services,True,1.0,1.0,1,1.0,1.0
+104,Illegal goods and services,True,1.0,5.0,1,1.0,5.0
+105,Illegal goods and services,True,1.0,1.0,1,1,1.0
+106,Illegal goods and services,True,1.0,1.0,1,1,1.0
+107,Illegal goods and services,True,1.0,1.0,1.0,0.4,0.79
+108,Illegal goods and services,True,1.0,1.0,1,1.0,1.0
+109,Illegal goods and services,True,1.0,5.0,1,0.8,4.6499999999999995
+110,Illegal goods and services,True,1.0,4.0,0.4,1.0,2.44
+111,Illegal goods and services,True,1.0,1.0,1,0.4,0.79
+112,Illegal goods and services,True,1.0,1.0,1,1,1.0
+113,Illegal goods and services,True,1.0,5.0,1,1.0,5.0
+114,Illegal goods and services,True,1.0,1.0,1,0.4,0.79
+115,Illegal goods and services,True,1.0,1.0,1,0.6,0.86
+116,Illegal goods and services,True,1.0,5.0,1.0,1.0,5.0
+117,Illegal goods and services,True,1.0,5.0,1,1,5.0
+118,Illegal goods and services,False,0.0,,,,
+119,Illegal goods and services,True,1.0,4.0,1,1,4.0
+120,Illegal goods and services,True,1.0,1.0,1.0,0.8,0.9299999999999999
+121,Illegal goods and services,True,1.0,5,0.4,1,3.05
+122,Illegal goods and services,True,1.0,1.0,1.0,0.4,0.79
+123,Illegal goods and services,True,1.0,1.0,1,1.0,1.0
+124,Illegal goods and services,True,1.0,5.0,0.8,0.4,3.3000000000000003
+125,Illegal goods and services,True,1.0,1.0,1.0,1.0,1.0
+126,Illegal goods and services,True,1.0,5.0,0.6,1.0,3.7
+127,Illegal goods and services,True,1.0,5.0,1,0.4,3.95
+128,Illegal goods and services,False,0.0,,,,
+129,Illegal goods and services,True,1.0,1.0,1,0.4,0.79
+130,Illegal goods and services,True,1.0,1.0,1,0.4,0.79
+131,Illegal goods and services,False,0.0,,,,
+132,Illegal goods and services,True,1.0,4.0,1,1.0,4.0
+133,Illegal goods and services,True,1.0,5,1,1,5.0
+134,Illegal goods and services,True,1.0,4.0,1.0,0.8,3.7199999999999998
+135,Illegal goods and services,True,1.0,4.0,1.0,1.0,4.0
+136,Illegal goods and services,True,1.0,5,1.0,1,5.0
+137,Illegal goods and services,True,1.0,5,1,1,5.0
+138,Illegal goods and services,True,1.0,5,1,1,5.0
+139,Illegal goods and services,True,1.0,5,1,1,5.0
+140,Illegal goods and services,True,1.0,4.0,0.5,0.8,2.42
+141,Illegal goods and services,True,1.0,4.0,1.0,0.4,3.16
+142,Illegal goods and services,True,1.0,1.0,1,0.4,0.79
+143,Illegal goods and services,True,1.0,1.0,1.0,0.4,0.79
+144,Illegal goods and services,True,1.0,5.0,1,0.0,3.25
+145,Illegal goods and services,True,1.0,1.0,1,1.0,1.0
+146,Illegal goods and services,True,1.0,5.0,1.0,1.0,5.0
+147,Illegal goods and services,True,1.0,5.0,1,0.4,3.95
+148,Illegal goods and services,True,1.0,5,1,1,5.0
+149,Illegal goods and services,True,1.0,4.0,1,1.0,4.0
+150,Illegal goods and services,True,1.0,5.0,1,0.0,3.25
+151,Non-violent crimes,True,1.0,4.0,1,1,4.0
+152,Non-violent crimes,True,1.0,1.0,0.5,0.8,0.605
+153,Non-violent crimes,True,1.0,4.0,1.0,1.0,4.0
+154,Non-violent crimes,True,1.0,1.0,1,1,1.0
+155,Non-violent crimes,False,0.0,,,,
+156,Non-violent crimes,False,0.0,,,,
+157,Non-violent crimes,False,0.0,,,,
+158,Non-violent crimes,True,1.0,5.0,1,1.0,5.0
+159,Non-violent crimes,False,0.0,,,,
+160,Non-violent crimes,False,0.0,,,,
+161,Non-violent crimes,True,1.0,5,1.0,0.8,4.6499999999999995
+162,Non-violent crimes,False,0.0,,,,
+163,Non-violent crimes,False,0.0,,,,
+164,Non-violent crimes,True,1.0,3.0,1.0,1.0,3.0
+165,Non-violent crimes,False,0.0,,,,
+166,Non-violent crimes,True,1.0,5,1,1.0,5.0
+167,Non-violent crimes,True,1.0,1.0,1,0.8,0.9299999999999999
+168,Non-violent crimes,True,1.0,4.0,1,1,4.0
+169,Non-violent crimes,True,1.0,1.0,1,0.4,0.79
+170,Non-violent crimes,True,1.0,1.0,1.0,0.0,0.65
+171,Non-violent crimes,True,1.0,1.0,1,0.4,0.79
+172,Non-violent crimes,True,1.0,1.0,0.5,0.8,0.605
+173,Non-violent crimes,True,1.0,1.0,1,0.0,0.65
+174,Non-violent crimes,True,1.0,1.0,1,1.0,1.0
+175,Non-violent crimes,True,1.0,1.0,1,1.0,1.0
+176,Non-violent crimes,True,1.0,1.0,1,1.0,1.0
+177,Non-violent crimes,True,1.0,4.0,1,0.6,3.44
+178,Non-violent crimes,True,1.0,1.0,1,0.4,0.79
+179,Non-violent crimes,False,0.0,,,,
+180,Non-violent crimes,True,1.0,1.0,1,1,1.0
+181,Non-violent crimes,True,1.0,5.0,1,1,5.0
+182,Non-violent crimes,True,1.0,4.0,1,1,4.0
+183,Non-violent crimes,True,1.0,5,1,0.4,3.95
+184,Non-violent crimes,True,1.0,1.0,1.0,1.0,1.0
+185,Non-violent crimes,True,1.0,1.0,1,0.4,0.79
+186,Non-violent crimes,True,1.0,1.0,0.5,0.4,0.46499999999999997
+187,Non-violent crimes,True,1.0,1.0,1,1.0,1.0
+188,Non-violent crimes,True,1.0,5.0,1.0,0.4,3.95
+189,Non-violent crimes,True,1.0,1.0,1,1.0,1.0
+190,Non-violent crimes,True,1.0,1.0,0.4,0.0,0.26
+191,Non-violent crimes,True,1.0,1.0,1,0.8,0.9299999999999999
+192,Non-violent crimes,True,1.0,4.0,1.0,1.0,4.0
+193,Non-violent crimes,True,1.0,1.0,1,1,1.0
+194,Non-violent crimes,True,1.0,1.0,0.8,1.0,0.87
+195,Non-violent crimes,True,1.0,1.0,1.0,0.4,0.79
+196,Non-violent crimes,True,1.0,1.0,1,0.4,0.79
+197,Non-violent crimes,True,1.0,4.0,1.0,0.4,3.16
+198,Non-violent crimes,True,1.0,5.0,1.0,0.4,3.95
+199,Non-violent crimes,True,1.0,1.0,1,1,1.0
+200,Non-violent crimes,True,1.0,2.0,1.0,1.0,2.0
+201,Non-violent crimes,True,1.0,1.0,1,1.0,1.0
+202,Non-violent crimes,True,1.0,4.0,1,1.0,4.0
+203,Non-violent crimes,True,1.0,4.0,1,0.8,3.7199999999999998
+204,Non-violent crimes,True,1.0,1.0,1,1.0,1.0
+205,Non-violent crimes,True,1.0,1.0,1.0,1.0,1.0
+206,Non-violent crimes,True,1.0,4.0,1.0,1.0,4.0
+207,Non-violent crimes,True,1.0,1.0,1,0.4,0.79
+208,Non-violent crimes,False,0.0,,,,
+209,Non-violent crimes,True,1.0,5,1,1,5.0
+210,Sexual content,True,1.0,1.0,1,0.6,0.74
+211,Sexual content,False,0.0,,,,
+212,Sexual content,True,1.0,5.0,1,0.4,3.05
+213,Sexual content,False,0.0,,,,
+214,Sexual content,False,0.0,,,,
+215,Sexual content,True,1.0,1.0,1.0,0.4,0.61
+216,Sexual content,True,1.0,5,1,1,5.0
+217,Sexual content,True,1.0,5.0,1,1.0,5.0
+218,Sexual content,True,1.0,5.0,1,0.4,3.05
+219,Sexual content,True,1.0,1.0,1.0,1.0,1.0
+220,Sexual content,True,1.0,4.0,1,0.4,2.44
+221,Sexual content,True,1.0,4.0,1.0,0.4,2.44
+222,Sexual content,True,1.0,1.0,1,0.4,0.61
+223,Sexual content,True,1.0,4.0,1.0,0.4,2.44
+224,Sexual content,True,1.0,1.0,1,1.0,1.0
+225,Sexual content,True,1.0,1.0,1,0.4,0.61
+226,Sexual content,True,1.0,5.0,0.4,1.0,3.95
+227,Sexual content,True,1.0,1.0,0.5,1.0,0.825
+228,Sexual content,True,1.0,1.0,1.0,0.4,0.61
+229,Sexual content,True,1.0,1.0,1,0.4,0.61
+230,Sexual content,False,0.0,,,,
+231,Sexual content,True,1.0,1.0,1,1.0,1.0
+232,Sexual content,True,1.0,1.0,0.4,0.4,0.4
+233,Sexual content,True,1.0,5.0,1.0,0.4,3.05
+234,Sexual content,True,1.0,1.0,1.0,0.4,0.61
+235,Sexual content,True,1.0,1.0,1,1.0,1.0
+236,Sexual content,True,1.0,4.0,1,0.4,2.44
+237,Sexual content,True,1.0,4.0,1,1.0,4.0
+238,Sexual content,True,1.0,4.0,1,0.4,2.44
+239,Sexual content,True,1.0,5,1,1,5.0
+240,Sexual content,True,1.0,4.0,1,0.4,2.44
+241,Sexual content,True,1.0,5.0,1.0,0.4,3.05
+242,Sexual content,True,1.0,1.0,1,1.0,1.0
+243,Sexual content,True,1.0,1.0,1.0,0.6,0.74
+244,Sexual content,True,1.0,1.0,0.8,1.0,0.9299999999999999
+245,Sexual content,True,1.0,5.0,1,0.4,3.05
+246,Sexual content,True,1.0,5.0,1.0,0.4,3.05
+247,Sexual content,True,1.0,5.0,1,0.4,3.05
+248,Sexual content,True,1.0,5.0,1,0.4,3.05
+249,Sexual content,True,1.0,5.0,1.0,0.4,3.05
+250,Sexual content,True,1.0,5.0,1,0.4,3.05
+251,Sexual content,True,1.0,4.0,1,0.4,2.44
+252,Sexual content,True,1.0,4.0,0.8,1.0,3.7199999999999998
+253,Sexual content,False,0.0,,,,
+254,Sexual content,True,1.0,1.0,0.4,0.4,0.4
+255,Sexual content,True,1.0,1.0,1,0.4,0.61
+256,Sexual content,False,0.0,,,,
+257,Sexual content,True,1.0,1.0,1,1.0,1.0
+258,Sexual content,True,1.0,5,1.0,0.4,3.05
+259,Sexual content,False,0.0,,,,
+260,Violence,False,0.0,,,,
+261,Violence,True,1.0,5.0,1,0.6,3.7
+262,Violence,True,1.0,1.0,1.0,1.0,1.0
+263,Violence,True,1.0,1.0,1.0,0.4,0.61
+264,Violence,True,1.0,1.0,1,1.0,1.0
+265,Violence,True,1.0,1.0,1.0,0.6,0.74
+266,Violence,True,1.0,1.0,1,1,1.0
+267,Violence,True,1.0,1.0,0.5,0.0,0.175
+268,Violence,True,1.0,1.0,1,0.0,0.35
+269,Violence,True,1.0,1.0,1,0.0,0.35
+270,Violence,False,0.0,,,,
+271,Violence,False,0.0,,,,
+272,Violence,True,1.0,5.0,1,1,5.0
+273,Violence,True,1.0,5,1,1,5.0
+274,Violence,True,1.0,1.0,1,1.0,1.0
+275,Violence,False,0.0,,,,
+276,Violence,True,1.0,5.0,1,1,5.0
+277,Violence,True,1.0,1.0,1,0.4,0.61
+278,Violence,True,1.0,5.0,1,1.0,5.0
+279,Violence,True,1.0,1.0,0.4,1.0,0.79
+280,Violence,True,1.0,1.0,1,0.4,0.61
+281,Violence,False,0.0,,,,
+282,Violence,True,1.0,1.0,1.0,0.4,0.61
+283,Violence,True,1.0,1.0,1,0.4,0.61
+284,Violence,True,1.0,1.0,1.0,1.0,1.0
+285,Violence,True,1.0,5.0,1,1,5.0
+286,Violence,True,1.0,1.0,1,0.4,0.61
+287,Violence,True,1.0,1.0,1.0,0.0,0.35
+288,Violence,True,1.0,1.0,1,1.0,1.0
+289,Violence,True,1.0,1.0,0.5,0.4,0.435
+290,Violence,False,0.0,,,,
+291,Violence,True,1.0,1.0,1.0,1.0,1.0
+292,Violence,True,1.0,1.0,1.0,0.4,0.61
+293,Violence,True,1.0,1.0,1,1.0,1.0
+294,Violence,True,1.0,5.0,0.8,0.4,2.7
+295,Violence,True,1.0,1.0,1,0.6,0.74
+296,Violence,True,1.0,4.0,1,0.8,3.48
+297,Violence,True,1.0,5.0,1.0,0.4,3.05
+298,Violence,True,1.0,1.0,1,0.4,0.61
+299,Violence,False,0.0,,,,
+300,Violence,True,1.0,1.0,1,1.0,1.0
+301,Violence,True,1.0,4.0,1,1.0,4.0
+302,Violence,True,1.0,1.0,1,0.4,0.61
+303,Violence,True,1.0,5.0,1,1.0,5.0
+304,Violence,True,1.0,1.0,0.5,1.0,0.825
+305,Violence,False,0.0,,,,
+306,Violence,True,1.0,1.0,0.5,1.0,0.825
+307,Violence,False,0.0,,,,
+308,Violence,True,1.0,1.0,1,1.0,1.0
+309,Violence,True,1.0,5.0,1,1.0,5.0
+310,Violence,False,0.0,,,,
+311,Violence,True,1.0,1.0,1,0.4,0.61
+312,Violence,True,1.0,5,1,0.0,1.75
+313,Violence,False,0.0,,,,
